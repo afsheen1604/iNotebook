@@ -1,0 +1,160 @@
+/* .galleryWrap {
+  display: grid;
+  grid-template-columns: repeat(3, 6fr);
+  grid-template-rows: repeat(8, 8vw);
+  grid-gap: 15px;
+} */
+/* .textboxtitle {
+  border-top: 2px solid #561734;
+  position: relative;
+  margin-left: 53px;
+  margin-right: 38px;
+  text-align: center;
+  top: 20px;
+  margin-bottom: 30px;
+}
+.textboxtitle span {
+  position: relative;
+  top: -23px;
+  color: white;
+  font-family: serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  text-decoration: none;
+  padding: 1px 1px;
+  background: #561734;
+  width: 120px;
+  height: 40px;
+  margin: 0 auto;
+  display: block;
+  
+}
+.text {
+  display: block;
+ 
+  margin-left: 70px;
+  margin-right: 60px;
+  font-size: 1.3rem;
+  color: #561734;
+  
+} */
+/* .textbox {
+  
+  top: -60px;
+  position: relative;
+  
+} */
+
+
+.galleryWrap .single img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  transition: all 0.25s ease-in-out;
+}
+
+.galleryWrap .single img:hover {
+  transform: scale(1.02);
+}
+
+.sliderWrap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.sliderWrap .btnClose,
+.sliderWrap .btnPrev,
+.sliderWrap .btnNext {
+  position: fixed;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 30px;
+  color: #fff;
+  z-index: 9999;
+}
+
+.btnNext:hover,
+.btnPrev:hover,
+.btnClose:hover {
+  opacity: 1;
+}
+.model .btnClose {
+  position: fixed;
+  cursor: pointer;
+  opacity: 0.6;
+  color: #fff;
+  z-index: 9999;
+  top: 40px;
+  right: 40px;
+}
+.model .btnClose:hover {
+  opacity: 1;
+}
+
+.sliderWrap .btnClose {
+  top: 40px;
+  right: 40px;
+}
+
+.sliderWrap .btnPrev {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 40px;
+}
+
+.sliderWrap .btnNext {
+  top: 50%;
+  transform: translateY(-50%);
+  right: 40px;
+}
+
+.fullScreenImage {
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullScreenImage img {
+  max-width: 100%;
+  max-height: 100%;
+  pointer-events: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+/* .date {
+  border-top: 1px solid #fff;
+  position: relative;
+  top: 20px;
+  margin-bottom: 30px;
+}
+
+.date span {
+  color: #000;
+  text-decoration: none;
+  font-style: italic;
+  font-size: 13px;
+  text-align: center;
+  padding: 2px 5px;
+  background: #fff;
+  width: 120px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  top: -10px;
+  font-family: "Droid serif", serif;
+} */

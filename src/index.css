@@ -1,0 +1,68 @@
+
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url("./fonts/Inter-Thin.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("./fonts/Inter-Light.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Inter-Regular.ttf") format("trueType");
+}
+
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Inter-Medium.ttf") format("trueType");
+}
+
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/Inter-Bold.ttf") format("trueType");
+}
+
+
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("./fonts/Inter-Black.ttf") format("trueType");
+}
+
+body{
+  overflow-y: auto;
+}
+
+:root {
+  --brand-color: #82af40;
+  --border-radius-sm: 4px;
+  --tblr-font-sans-serif: "Inter", -apple-system, BlinkMacSystemFont,
+  San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
