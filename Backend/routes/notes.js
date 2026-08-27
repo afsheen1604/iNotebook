@@ -3,7 +3,6 @@ const router = express.Router();
 const Notes = require("../models/Notes");
 var fetchuser = require("../middleware/fetchuser");
 const { body, validationResult } = require("express-validator");
-const { getByTitle } = require("@testing-library/react");
 const mongoose = require("mongoose");
 const moment = require('moment');
 
@@ -24,7 +23,7 @@ async function getTotalUniqueDatesForUser(userId) {
     const pipeline = [
       // Match documents for the specific user
       {
-        $match: { user: mongoose.Types.ObjectId(userId) }
+        $match: { user: new mongoose.Types.ObjectId(userId) }
       },
       // Group documents by the 'date' field and count the occurrences
       {
@@ -64,7 +63,7 @@ async function getTotalImagesForUser(userId) {
     const pipeline = [
       // Match documents for the specific user
       {
-        $match: { user: mongoose.Types.ObjectId(userId) }
+        $match: { user: new mongoose.Types.ObjectId(userId) }
       },
       // Project only the 'image' field to work with
       {
@@ -344,7 +343,7 @@ router.post("/tagsData", fetchuser, async (req, res) => {
     const pipeline = [
       {
         $match: {
-          user: mongoose.Types.ObjectId(user)
+          user: new mongoose.Types.ObjectId(user)
         }
       },
       {
@@ -405,7 +404,7 @@ router.post("/datesData", fetchuser, async (req, res) => {
     const pipeline = [
       {
         $match: {
-          user: mongoose.Types.ObjectId(user), // Convert req.user.id to ObjectId for matching
+          user: new mongoose.Types.ObjectId(user),
           date: { $gte: `01/${req.body.month}/${req.body.year}`, $lte: `30/${req.body.month}/${req.body.year}` } // Date strings in the correct format
         }
       },

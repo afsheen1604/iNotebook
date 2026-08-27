@@ -45,8 +45,11 @@ function Profile( props ) {
     { value: '05', label: 'May' },
     { value: '06', label: 'June' },
     { value: '07', label: 'July' },
-    { value: '08', label: 'August' }
-    // Add more options as needed
+    { value: '08', label: 'August' },
+    { value: '09', label: 'September' },
+    { value: '10', label: 'October' },
+    { value: '11', label: 'November' },
+    { value: '12', label: 'December' }
   ];
 
   const getIntroOfPage = (label) => {
@@ -135,8 +138,13 @@ function Profile( props ) {
 
   const COLORS = ["red", "blue", "green", "orange", "purple", "yellow"];
 
+  const currentDate = new Date();
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const currentYear = String(currentDate.getFullYear());
+  const currentMonthLabel = months.find(m => m.value === currentMonth)?.label || 'January';
+
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState({ value: '08', label: 'August' });
+  const [selectedMonth, setSelectedMonth] = useState({ value: currentMonth, label: currentMonthLabel });
 
 
   const handleSelectChange = (selected) => {
@@ -146,7 +154,7 @@ function Profile( props ) {
   const handleMonthChange = (selected) => {
     setSelectedMonth(selected);
     console.log(selected);
-    getDatesData(selected.value, "2023", "");
+    getDatesData(selected.value, currentYear, "");
   };
 
   const [alert, setAlert] = useState(null);
@@ -164,8 +172,8 @@ function Profile( props ) {
     console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
       getUser("");
-      getTagsData("08", "2023", "");
-      getDatesData("08", "2023", "");
+      getTagsData(currentMonth, currentYear, "");
+      getDatesData(currentMonth, currentYear, "");
       console.log(user);
       getStats("");
     } else {

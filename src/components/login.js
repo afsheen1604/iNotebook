@@ -7,7 +7,7 @@ import{Link} from  'react-router-dom'
 import './login.css'
 import loginlogo from './log mw.png'
 import noteContext from '../context/notes/noteContext'
-// import { use } from '../../backend/routes/auth'
+import API_URL from '../config'
 
 
 const Login = (props) => {
@@ -40,7 +40,7 @@ const Login = (props) => {
       } else {
   
           setIsLoading(true);
-          const response = await fetch("http://localhost:5000/api/auth/userotpsend", {
+          const response = await fetch(`${API_URL}/api/auth/userotpsend`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ const Login = (props) => {
       props.showAlert("Otp Length minimum 6 digit","danger")
     } else {
 
-      const response = await fetch("http://localhost:5000/api/auth/userotpverify", {
+      const response = await fetch(`${API_URL}/api/auth/userotpverify`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ const Login = (props) => {
       props.showAlert("Passwords not matched", "danger");
       return;
   }
-  const response = await fetch("http://localhost:5000/api/auth/forgotPassword", {
+  const response = await fetch(`${API_URL}/api/auth/forgotPassword`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -117,7 +117,7 @@ const Login = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:5000/api/auth/login", {
+        const response = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -162,7 +162,7 @@ const Login = (props) => {
         <div className="loginpagelogo">
             <img className='centered-image' src={loginlogo}/>
         </div>
-        {/* <h1 className="h1 text-center mb-3" style={{fontFamily:"Brush Script MT,cursive",color:"#206bc4",fontSize:"55px"}}>Dear Me</h1> */}
+        {/* <h1 className="h1 text-center mb-3" style={{fontFamily:"Brush Script MT,cursive",color:"#206bc4",fontSize:"55px"}}>iNotebook</h1> */}
 
             {formStep===0 &&(<section> <h2 className="h2 text-center mb-3">Login to your account</h2>
               <div className="mb-3">

@@ -3,7 +3,6 @@ const router = express.Router();
 const TodoList = require('../models/TodoList');
 var fetchuser = require('../middleware/fetchuser');
 const { body, validationResult } = require('express-validator');
-const { getByTitle } = require('@testing-library/react');
 const Tasks = require('../models/Tasks');
 
 const User = require('../models/User');
@@ -109,7 +108,7 @@ router.delete('/deleteListItem/:id', fetchuser, async (req, res) => {
 
         listItem = await TodoList.findByIdAndDelete(req.params.id);
 
-        res.json({"Success":"Note deleted", "Note":note});
+        res.json({"Success":"Item deleted", "item":listItem});
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Some error Occured");
@@ -133,7 +132,10 @@ router.get('/suggestTasks', fetchuser, [
             const value = hobbies[i];
             const tasks = await Tasks.find({ Category: value });
             
-            while(true){
+            if (tasks.length === 0) continue;
+
+            let attempts = 0;
+            while(attempts < tasks.length){
                 let randomIndex = Math.floor(Math.random() * tasks.length);
                 let listItem = await SuggestedTodoList.findOne({ content: tasks[randomIndex].Content });
                 if(!listItem){
@@ -142,9 +144,10 @@ router.get('/suggestTasks', fetchuser, [
                         user : req.user.id,
                         type: "suggested"
                     });
-                    let savedListItem = await listItem.save();
+                    await listItem.save();
                     break;
                 }
+                attempts++;
             }
         }
 
@@ -156,7 +159,7 @@ router.get('/suggestTasks', fetchuser, [
 
 });
 
-router.post('/createTasks',[
+router.post('/createTasks', fetchuser, [
     body('content', 'content Must be Atleast 5 Characters').isLength({ min: 5 }),
 ], async (req, res) => {
     

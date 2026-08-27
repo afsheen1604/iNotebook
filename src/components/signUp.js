@@ -8,6 +8,7 @@ import './login.css'
 import loginlogo from './log mw.png'
 // import MultiSelect from 'react-multiple-select-dropdown-lite'
 import Select from 'react-select'
+import API_URL from '../config'
 // import 'react-multiple-select-dropdown-lite/dist/index.css'
 const MAX_STEPS=3;
 const Signup = (props) => {
@@ -50,7 +51,7 @@ const Signup = (props) => {
       } else {
   
           setIsLoading(true);
-          const response = await fetch("http://localhost:5000/api/auth/userotpsend", {
+          const response = await fetch(`${API_URL}/api/auth/userotpsend`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,7 +84,7 @@ const Signup = (props) => {
       props.showAlert("Otp Length minimum 6 digit","danger")
     } else {
 
-      const response = await fetch("http://localhost:5000/api/auth/userotpverify", {
+      const response = await fetch(`${API_URL}/api/auth/userotpverify`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -107,7 +108,7 @@ const Signup = (props) => {
         // e.preventDefault();
 
         
-        const response = await fetch("http://localhost:5000/api/auth/createuser", {
+        const response = await fetch(`${API_URL}/api/auth/createuser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +125,8 @@ const Signup = (props) => {
 
         }
         else {
-          props.showAlert("error Occured", "danger");
+          const errorMsg = json.errors ? json.errors[0].msg : (json.error || "An error occurred");
+          props.showAlert(errorMsg, "danger");
         }
     }
 
@@ -190,7 +192,7 @@ const Signup = (props) => {
         <div className="loginpagelogo">
             <img className='centered-image' src={loginlogo}/>
         </div>
-        {/* <h1 className="h1 text-center mb-3" style={{fontFamily:"Brush Script MT,cursive",color:"#206bc4",fontSize:"55px"}}>Dear Me</h1> */}
+        {/* <h1 className="h1 text-center mb-3" style={{fontFamily:"Brush Script MT,cursive",color:"#206bc4",fontSize:"55px"}}>iNotebook</h1> */}
         <h2 className="h2 text-center mb-3">Create new account</h2>
        <div className="flex items-center mb-2 ">
       {formStep>0 &&( <button style={{all:"unset",cursor:"pointer"}} onClick={prevStep}>

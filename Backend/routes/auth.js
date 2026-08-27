@@ -8,15 +8,15 @@ var fetchuser = require('../middleware/fetchuser');
 const userotp =require('../models/UserOtp');
 const nodemailer=require("nodemailer");
 
-const JWT_SECRET = "Bhargav@2002";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const tarnsporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
   port: 587,
   secure: false,
     auth: {
-        user: "dearme663@gmail.com",
-        pass: "wcznvhbngdqfrryr"
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 })
 
@@ -24,7 +24,7 @@ const getEmailContentWithOTP = (otp,heading,purpose) => {
     return`
     <!DOCTYPE html>
             <head>
-                <title>Your Email Title</title>
+                <title>iNotebook - OTP Verification</title>
             </head>
             <body style="margin: 0;padding: 0;background-color: #f2f2f2;font-family: Arial, sans-serif;">
               <div style="max-width: 600px;margin: 20px auto;background-color: #ffffff;border: 1px solid #e0e0e0;border-radius: 5px;padding: 20px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" >
@@ -32,7 +32,7 @@ const getEmailContentWithOTP = (otp,heading,purpose) => {
                 <p style="color: #444444;" >Please use the verification code below  ${purpose}</p>
                 <h3><strong>${otp}</strong></h3>
                 <p style="color: #444444;">If you didn't request this, you can ignore this email.</p>
-                <p style="color: #444444;">Thanks,<br>The Dear Me team.</p>
+                <p style="color: #444444;">Thanks,<br>The iNotebook team.</p>
                 </div>
             </body>
         </html>
@@ -219,7 +219,12 @@ router.post('/updateUser', fetchuser,  async (req, res) => {
 router.post('/forgotPassword',  async (req, res) => {
 
     try {
-        const { reqemail, password } = req.body;
+        const { reqemail, password, otp } = req.body;
+
+        const otpRecord = await userotp.findOne({ email: reqemail });
+        if (!otpRecord || otpRecord.otp !== otp) {
+            return res.status(400).json({ error: "Invalid or expired OTP" });
+        }
 
         const updatedUser = {};
         const salt = await bcrypt.genSalt(10);
@@ -260,7 +265,7 @@ router.post('/userotpsend',async(req,res)=>{
                 await updateData.save();
 
                 const mailOptions = {
-                    from: "dearme663@gmail.com",
+                    from: process.env.EMAIL_USER,
                     to: email,
                     subject: "Sending Email For Otp Validation",
                     html: emailContentWithOTP
@@ -285,7 +290,7 @@ router.post('/userotpsend',async(req,res)=>{
 
         await saveOtpData.save();
         const mailOptions = {
-            from: process.env.EMAIL,
+            from: process.env.EMAIL_USER,
             to: email,
             subject: "Sending Email For Otp Validation",
             text: `OTP:- ${OTP}`
