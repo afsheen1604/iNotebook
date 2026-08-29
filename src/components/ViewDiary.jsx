@@ -134,7 +134,7 @@ const ViewDiary = (props) => {
 
         <div className='row mt-5'>
           
-          {(state==='A' && diary)?<div className='col-8'>{(diary.description) && <div className="" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(diary.description) }} />}
+          {(state==='A' && diary)?<div className='col-12 col-lg-8'>{(diary.description) && <div className="" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(diary.description) }} />}
 
           {openModal && diary && diary.image && diary.image.length > 0 && 
             <div className='sliderWrap'>
@@ -147,14 +147,14 @@ const ViewDiary = (props) => {
             </div>
           }
 
-          </div> : (state==='A')&&<div className='col-8 d-flex justify-content-center align-items-center'>
+          </div> : (state==='A')&&<div className='col-12 col-lg-8 d-flex justify-content-center align-items-center'>
               <p style={{fontSize: "1.7rem"}}>Nothing Written</p>
           </div>
           }
 
           {(state==="E") && 
 
-          <div className='col-8'>
+          <div className='col-12 col-lg-8'>
             <div className='card'>
                 <div className='card-body'>
                   <div className='mb-3'>
@@ -187,8 +187,8 @@ const ViewDiary = (props) => {
 
           }
 
-          <div className='col-4 ms-auto'>
-            <div className="card my-3 ms-auto" style={{width: "fit-content", backgroundColor: "#F8F6F0"}}>
+          <div className='col-12 col-lg-4 ms-auto'>
+            <div className="card my-3 mx-auto ms-lg-auto" style={{width: "fit-content", backgroundColor: "#F8F6F0"}}>
               <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
               {/* {selectedDate && <p>Selected date: {selectedDate.toLocaleDateString('en-GB')}</p>} */}
             </div>

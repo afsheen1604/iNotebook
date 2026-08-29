@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,22 @@ const Navbar = () => {
 
     let location = useLocation();
     const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
+
+    // Close sidebar when route changes (mobile UX)
+    useEffect(() => {
+        setIsOpen(false);
+    }, [location.pathname]);
+
+    // Prevent body scroll when mobile drawer open
+    useEffect(() => {
+        if (isOpen && window.innerWidth < 992) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [isOpen]);
 
     const handleLogout = ()=>{
         localStorage.removeItem('token');
@@ -46,7 +62,22 @@ const Navbar = () => {
 
     return (
         <> 
-        {localStorage.getItem('token') && <aside style={{backgroundColor: "#1A1C1E", borderRight: "1px solid #2D3136", width: "240px", padding: "24px 16px", overflow: "hidden", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 1000, display: "flex", flexDirection: "column"}}>
+        {localStorage.getItem('token') && <>
+        {/* Mobile top bar with hamburger */}
+        <div className="mobile-topbar d-lg-none" style={{position: "fixed", top: 0, left: 0, right: 0, height: "56px", backgroundColor: "#1A1C1E", borderBottom: "1px solid #2D3136", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", zIndex: 1050}}>
+            <Link to="/" style={{textDecoration: "none", display: "flex", alignItems: "center", gap: "10px"}}>
+                <i className="las la-book-open" style={{color: "#C49A45", fontSize: "22px"}}></i>
+                <span style={{color: "#FFFFFF", fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: 600}}>iNotebook</span>
+            </Link>
+            <button aria-label="Toggle menu" onClick={() => setIsOpen(!isOpen)} type="button" style={{background: "transparent", border: "1px solid #2D3136", borderRadius: "8px", width: "40px", height: "40px", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", padding: 0}}>
+                <i className={isOpen ? "las la-times" : "las la-bars"} style={{fontSize: "20px"}}></i>
+            </button>
+        </div>
+
+        {/* Backdrop */}
+        {isOpen && <div onClick={() => setIsOpen(false)} className="d-lg-none" style={{position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1040}} />}
+
+        <aside className={`app-sidebar ${isOpen ? 'is-open' : ''}`} style={{backgroundColor: "#1A1C1E", borderRight: "1px solid #2D3136", width: "240px", padding: "24px 16px", overflow: "hidden", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 1045, display: "flex", flexDirection: "column"}}>
             <div style={{display: "flex", flexDirection: "column", height: "100%", overflow: "hidden"}}>
                 {/* Logo */}
                 <div style={{height: "48px", marginBottom: "32px", paddingLeft: "12px"}} className="d-flex align-items-center">
@@ -113,7 +144,8 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
-        </aside>}
+        </aside>
+        </>}
         </>
     )
 }

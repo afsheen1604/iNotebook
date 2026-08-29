@@ -260,10 +260,10 @@ function Profile( props ) {
       <section className="px-3 px-md-4 pb-2 pt-2">
         <p className="mb-2" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "20px", fontWeight: 600, lineHeight: "28px"}}>User info</p>
         <div className="card border-0" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, padding: "20px"}}>
-            <div className="d-flex">
+            <div className="d-flex flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start">
               <img src={user.profileImage || defaultAvatar} alt="" onError={(e) => {e.target.src = defaultAvatar}} style={{width: "150px", height: "150px", borderRadius: "9999px", objectFit: "cover", border: `3px solid ${theme.accent}`, flexShrink: 0, backgroundColor: theme.accent}} />
-              <div className="ms-4 flex-grow-1">
-                <div className="d-flex align-items-center justify-content-between mb-1">
+              <div className="ms-md-4 mt-3 mt-md-0 flex-grow-1 w-100">
+                <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-1 gap-2">
                   <h4 className="mb-0" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "24px", fontWeight: 600, lineHeight: "32px"}}>{user.name}</h4>
                   <button className="btn text-white px-3" style={{backgroundColor: theme.sidebar, borderRadius: "8px", fontSize: "12px", fontWeight: 500, padding: "8px 16px"}} onClick={showProfileModal}>
                     <i className="las la-pen me-1"></i> Update Profile
@@ -276,20 +276,20 @@ function Profile( props ) {
                     <span key={i} style={{backgroundColor: theme.cardAlt, color: theme.text, border: `1px solid ${theme.border}`, borderRadius: "8px", padding: "6px 12px", fontSize: "13px", fontWeight: 500, lineHeight: "18px", height: "32px", display: "inline-flex", alignItems: "center"}}>{hobby}</span>
                   )) : <span style={{color: theme.textMuted, fontSize: "13px"}}>No hobbies added</span>}
                 </div>
-                <div className="row">
-                  <div className="col-4">
+                <div className="row g-2">
+                  <div className="col-12 col-md-4">
                     <div className="d-flex align-items-center gap-2">
                       <i className="las la-phone" style={{color: theme.accent, fontSize: "1.1rem"}}></i>
                       <span style={{color: theme.text, fontSize: "14px", lineHeight: "20px", fontWeight: 400}}>{user.mobile || "—"}</span>
                     </div>
                   </div>
-                  <div className="col-4">
+                  <div className="col-12 col-md-4">
                     <div className="d-flex align-items-center gap-2">
                       <i className="las la-envelope" style={{color: theme.accent, fontSize: "1.1rem"}}></i>
                       <span style={{color: theme.text, fontSize: "14px", lineHeight: "20px", fontWeight: 400}}>{user.email || "—"}</span>
                     </div>
                   </div>
-                  <div className="col-4">
+                  <div className="col-12 col-md-4">
                     <div className="d-flex align-items-center gap-2">
                       <i className="las la-calendar" style={{color: theme.accent, fontSize: "1.1rem"}}></i>
                       <span style={{color: theme.text, fontSize: "12px", lineHeight: "16px", fontWeight: 400}}>Joined: {user.date ? new Date(user.date).toLocaleDateString() : "—"}</span>

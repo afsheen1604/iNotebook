@@ -89,3 +89,78 @@
 .rdp-day_selected:hover{
   background-color: #a8833a;
 }
+
+/* ============ Responsive Layout ============ */
+
+/* Sidebar & main content */
+.app-sidebar {
+  transition: transform 0.3s ease-in-out;
+}
+
+.app-main-content {
+  margin-left: 240px;
+}
+
+/* Tablet & mobile: sidebar becomes off-canvas drawer */
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+  }
+  .app-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .app-main-content {
+    margin-left: 0;
+    padding-top: 56px; /* space for mobile topbar */
+  }
+}
+
+/* Prevent horizontal scroll on small screens */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Make images and rich content fluid inside pages */
+.app-main-content img,
+.app-main-content video,
+.app-main-content iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive tweaks for common patterns used in pages */
+@media (max-width: 767.98px) {
+  .app-main-content .container,
+  .app-main-content .container-fluid {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  /* Tighter card/section spacing */
+  .app-main-content .p-4 { padding: 1rem !important; }
+  .app-main-content .p-5 { padding: 1.25rem !important; }
+}
+
+/* Quill editor should not overflow on mobile */
+.ql-container, .ql-editor {
+  max-width: 100%;
+}
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Todo list responsive card width */
+.todolist-card {
+  width: 70%;
+}
+@media (max-width: 991.98px) {
+  .todolist-card { width: 100%; }
+}
+
+/* Charts / Recharts responsive tweaks */
+.recharts-responsive-container {
+  max-width: 100%;
+}

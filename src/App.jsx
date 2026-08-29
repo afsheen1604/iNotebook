@@ -46,7 +46,7 @@ function App() {
         <Router>
           <div style={{display: "flex", minHeight: "100vh"}}>
             <Navbar />
-            <div style={{flex: 1, marginLeft: localStorage.getItem('token') ? "240px" : "0", backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
+            <div className={localStorage.getItem('token') ? 'app-main-content' : ''} style={{flex: 1, backgroundColor: '#F8F6F0', minHeight: "100vh", width: "100%", minWidth: 0}}>
               <Alert alert={alert}/>
               <Routes>
                   <Route exact path="/" element={<Profile showAlert={showAlert} />} />

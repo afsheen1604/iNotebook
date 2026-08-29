@@ -67,12 +67,12 @@ const Viewnote = () => {
     <div className='p-4' style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
         <br />
     <div className='row'>
-      <div className='col-6'>
+      <div className='col-12 col-md-6'>
       <div>
           <p style={{textAlign:"left",fontSize:"2.5rem",color:"#1A1C1E"}}> {(noteItem===null)?'':noteItem.title}</p> 
         </div>
       </div>
-      <div className='col-6'>
+      <div className='col-12 col-md-6'>
       <div className="" style={{textAlign:"right",fontSize:"1rem",color:"#1A1C1E"}}>
           Date: <b>{noteItem && noteItem.date}</b>
           <br></br>
@@ -103,7 +103,7 @@ const Viewnote = () => {
        {/* {(noteItem && noteItem.description) && <div className="textbox" dangerouslySetInnerHTML={{ __html: noteItem.description }} />} */}
        
       <div className='row'>
-        <div className='col-7'>
+        <div className='col-12 col-lg-7 mb-3'>
         <div className="card" style={{borderRadius:"10px", backgroundColor:"#FFFFFF"} }>
     <div className="card-body text-center">
       {(noteItem?.description) && <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(noteItem.description) }} />}
@@ -125,7 +125,7 @@ const Viewnote = () => {
         </div>
       }
 
-      <div className='galleryWrap col-5'>
+      <div className='galleryWrap col-12 col-lg-5'>
       {openPhotos&& <div className='row'>
         {
           

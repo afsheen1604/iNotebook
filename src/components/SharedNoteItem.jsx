@@ -10,7 +10,7 @@ const SharedNoteItem = (props) => {
     const { note, shareNote, deleteNoteItem } = props; 
     return (
         <>
-        <div className="col-md-3 mb-3 notesContainer">
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 notesContainer">
             <div className="card card-link card-link-rotate" style={{"backgroundColor": "#F3EEE3"}}>
                 <div className="ribbon fs-5 px-3" style={{backgroundColor: "#C49A45"}}>{note.tag}</div>
                 <div className="card-body">

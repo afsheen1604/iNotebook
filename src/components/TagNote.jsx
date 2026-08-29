@@ -99,8 +99,8 @@ const TagNote = (props) => {
     
 
     <div className="p-4" style={{backgroundColor: '#F8F6F0', minHeight:"100vh"}}>
-      <div className="row mb-5">
-        <div className="col-7">
+      <div className="row mb-5 g-2">
+        <div className="col-12 col-md-7">
           {/* <button
               type="button"
               className="btn text-white me-2"
@@ -122,7 +122,7 @@ const TagNote = (props) => {
             </button>
         </div>
           
-        <div className="col-5 row">
+        <div className="col-12 col-md-5 row g-2">
             <div className="col-8">
               <Select
                 options={tags}

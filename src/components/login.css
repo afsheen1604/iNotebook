@@ -111,3 +111,47 @@ img{
     }
 
   }
+
+  /* Mobile-first fixes for the login screen */
+  @media (max-width: 1023.98px) {
+    .mainlogin {
+      margin-left: 0;
+      margin-right: 0;
+      min-height: 100vh;
+      height: auto;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login_content {
+      width: 100%;
+      max-width: 420px;
+      grid-template-columns: 1fr;
+      row-gap: 1rem;
+    }
+    .login_img {
+      max-width: 100%;
+      height: auto;
+      display: flex;
+      justify-content: center;
+    }
+    .login_img img {
+      width: 60%;
+      max-width: 200px;
+      height: auto;
+      margin-top: 0.5rem;
+    }
+    .login_form {
+      position: static;
+      height: auto;
+      width: 100%;
+    }
+    .signinform {
+      position: static;
+      width: 100%;
+      padding: 1.5rem 1rem;
+      bottom: auto;
+      left: auto;
+    }
+  }

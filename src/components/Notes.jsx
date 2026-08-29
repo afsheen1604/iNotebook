@@ -372,12 +372,12 @@ const Notes = (props) => {
                 <strong>{capitalize(alert.type)}</strong>: {alert.msg} 
               </div>}
             </div>
-            <div className="modal-body py-4 row">
-                  <div className="mb-3 col-6">
+            <div className="modal-body py-4 row g-2">
+                  <div className="mb-3 col-12 col-md-6">
                     <label className="form-label">Title</label>
                     <input type="text" className="form-control" placeholder="Give a title!" id="title" name="title" value={note.title} aria-describedby="emailHelp" onChange={onChange}/>
                   </div>
-                  <div className="mb-3 col-6">
+                  <div className="mb-3 col-12 col-md-6">
                     <label  className="form-label"> Tag
                       {/* <span><svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="8.5" cy="8.5" r="1" fill="currentColor"></circle><path d="M4 7v3.859c0 .537 .213 1.052 .593 1.432l8.116 8.116a2.025 2.025 0 0 0 2.864 0l4.834 -4.834a2.025 2.025 0 0 0 0 -2.864l-8.117 -8.116a2.025 2.025 0 0 0 -1.431 -.593h-3.859a3 3 0 0 0 -3 3z"></path></svg></span><span>Tag</span>*/} </label>
                     <input type="text" className="form-control" id="tag" name="tag" value={note.tag} aria-describedby="emailHelp" onChange={onChange}/>
@@ -458,12 +458,12 @@ const Notes = (props) => {
 
       {/* <div className='card'>
                 <div className='card-body'> */}
-      <div className="card my-3" style={{width: "fit-content", backgroundColor: "#F8F6F0"}}>
+      <div className="card my-3 mx-auto mx-md-0" style={{width: "fit-content", maxWidth: "100%", backgroundColor: "#F8F6F0"}}>
         <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
         {/* {selectedDate && <p>Selected date: {selectedDate.toLocaleDateString('en-GB')}</p>} */}
       </div>
 
-      <div className="container mx-2 notesContainer">
+      <div className="container-fluid notesContainer">
         <div className="row my-3">
           <h2>Your Notes</h2>
           {notes.length === 0 && "No notes to display"}

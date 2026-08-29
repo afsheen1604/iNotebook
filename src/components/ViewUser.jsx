@@ -8,7 +8,8 @@ import { PieChart, Pie, Tooltip, Sector, Cell, Label, BarChart,
   XAxis,
   YAxis, 
   CartesianGrid,
-  Legend } from "recharts";
+  Legend,
+  ResponsiveContainer } from "recharts";
 // import PieChart from './PieChart';
 
 
@@ -247,12 +248,12 @@ function ViewUser( props ) {
                 <label className="form-label">Name</label>
                 <input type="text" className="form-control" name="name" value={updatedUser.name} onChange={handleProfileChange} />  
               </div>
-              <div className="mb-3 row">
-                <div className="col-6">
+              <div className="mb-3 row g-2">
+                <div className="col-12 col-md-6">
                   <label className="form-label">Upload Profile Picture <span><svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-file-upload" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M12 11v6"></path><path d="M9.5 13.5l2.5 -2.5l2.5 2.5"></path></svg></span></label>
                   <input type="file" label="Image" name="profileImage" accept=".jpeg, .png, .jpg" className="form-control" onChange={(e) => handleImageUpload(e)} />
                 </div>
-                <div className="col-6">
+                <div className="col-12 col-md-6">
                   <label className="form-label">Mobile</label>
                   <input type="text" className="form-control" name="mobile" value={updatedUser.mobile} onChange={handleProfileChange} />
                 </div>
@@ -266,12 +267,12 @@ function ViewUser( props ) {
                   onChange={handleSelectChange}
                 />
               </div>
-              <div className="mb-3 row">
-                <div className="col-6">
+              <div className="mb-3 row g-2">
+                <div className="col-12 col-md-6">
                   <label className="form-label">Update Password</label>
                   <input type="password" className="form-control" name="password" value={updatedUser.password} onChange={handleProfileChange} />
                 </div>
-                <div className="col-6">
+                <div className="col-12 col-md-6">
                   <label className="form-label">Re-Enter Password</label>
                   <input type="password" className="form-control" name="cnfPassword" value={updatedUser.cnfPassword} onChange={handleProfileChange} />
                 </div>
@@ -387,22 +388,21 @@ function ViewUser( props ) {
               </div>
       </section>
 
-      <div className="d-flex card mx-4 mb-4  flex-row align-items-center justify-content-between" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
-        <div className="">
+      <div className="d-flex card mx-4 mb-4 flex-column flex-lg-row align-items-center justify-content-between" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
+        <div className="w-100" style={{maxWidth: "100%", overflowX: "auto"}}>
           <Select
             options={months}
             value={selectedMonth}
             onChange={handleMonthChange}
-            className="w-25 ms-5 mb-2"
+            className="w-auto ms-3 mb-2"
           />
+          <ResponsiveContainer width="100%" height={300} minWidth={280}>
           <BarChart
-            width={750}
-            height={300}
             data={datesData}
             margin={{
               top: 5,
               right: 30,
-              left: 20,
+              left: 0,
               bottom: 5
             }}
           >
@@ -413,28 +413,25 @@ function ViewUser( props ) {
             <Legend />
             <Bar dataKey="Notes" barSize={20} fill="#1A1C1E" />
           </BarChart>
+          </ResponsiveContainer>
         </div>
-        <div className="">
-          <PieChart width={450} height={450}>
+        <div className="w-100" style={{maxWidth: "450px"}}>
+          <ResponsiveContainer width="100%" height={360} minWidth={280}>
+          <PieChart>
             <Pie
               data={tagsData}
               dataKey="value"
-              cx={200}
-              cy={200}
               outerRadius={120}
               fill="black"
               label
             >
-              {/* Add colors to each segment of the pie */}
               {tagsData.map((tag, entry, index) => (
                 <Cell key={`cell-${index}`} fill={"#1A1C1E"} />
               ))}
-
-              
-
             </Pie>
             <Tooltip />
           </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
