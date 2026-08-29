@@ -53,8 +53,6 @@ const Login = (props) => {
             setShowotp(true);
             setIsLoading(false);
             props.showAlert("OTP sended successfully","success")
-
-              console.log("otp sent")
           } else {
               setIsLoading(false);
               props.showAlert("error","danger");
@@ -66,10 +64,8 @@ const Login = (props) => {
 
     if (otp === "") {
       props.showAlert("Enter Your Otp","danger")
-    } else if (!/[^a-zA-Z]/.test(otp)) {
-      props.showAlert("Enter Valid Otp","danger")
-    } else if (otp.length < 6) {
-      props.showAlert("Otp Length minimum 6 digit","danger")
+    } else if (!/^[0-9]{6}$/.test(otp)) {
+      props.showAlert("OTP must be 6 digits","danger")
     } else {
 
       const response = await fetch(`${API_URL}/api/auth/userotpverify`, {
@@ -83,7 +79,6 @@ const Login = (props) => {
         setFormStep(cur=>cur+1)
         setShowotp(false)
         props.showAlert("Email verified successfully","success")
-        console.log("otp verified")
       } else {
         props.showAlert("error","danger")
       }
@@ -100,11 +95,11 @@ const Login = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ reqemail: updatepassword.email,password:updatepassword.newpassword})
+            body: JSON.stringify({ reqemail: updatepassword.email, password: updatepassword.newpassword, otp: otp})
         });
     // updateUser(updatepassword.name,updatepassword.mobile,updatepassword.newpassword,updatepassword.hobbies,updatepassword.profileImage);
     // refMC.current.click();
-    if(response.status==200){
+    if(response.status===200){
       navigate('/');
     props.showAlert("Password changed successfully","success");
 
@@ -117,23 +112,25 @@ const Login = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${API_URL}/api/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: credentials.email, password: credentials.password })
-        });
-        const json = await response.json()
-        console.log(json);
-        if (json.success) { 
-            // Save the auth token and redirect
-            localStorage.setItem('token', json.authToken)
-            navigate('/');
-            props.showAlert("Logged in successfully", "success");
-        }
-        else {
-            props.showAlert("Invalid credentials", "danger");
+        try {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: credentials.email, password: credentials.password })
+            });
+            const json = await response.json().catch(() => ({}));
+            if (response.ok && json.success) {
+                localStorage.setItem('token', json.authToken)
+                navigate('/');
+                props.showAlert("Logged in successfully", "success");
+            }
+            else {
+                props.showAlert(json.error || "Invalid credentials", "danger");
+            }
+        } catch (err) {
+            props.showAlert("Network error. Please try again.", "danger");
         }
     }
     

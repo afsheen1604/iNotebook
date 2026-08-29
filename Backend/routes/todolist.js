@@ -65,20 +65,14 @@ router.put('/updateListItem/:id', fetchuser, async (req, res) => {
             return res.status(401).send("Not Allowed");
         }
 
-        if(status == "completed"){
+        if(status === "completed"){
             const suggestedlistItem = new SuggestedTodoList({
                 content: req.body.content, user: req.user.id, status:"completed"
             })
             const savedListItem = await suggestedlistItem.save();
         }
         else{
-            SuggestedTodoList.deleteMany({content: req.body.content, user: req.user.id}, (err)=>{
-                if (err) {
-                    console.error('Error deleting document:', err);
-                  } else {
-                    console.log('Document deleted successfully');
-                  }
-            });
+            await SuggestedTodoList.deleteMany({content: req.body.content, user: req.user.id});
         }
 
         listItem = await TodoList.findByIdAndUpdate(req.params.id, {$set: updatedListItem}, {new: true});
@@ -124,7 +118,7 @@ router.get('/suggestTasks', fetchuser, [
 
         console.log(user);
 
-        const hobbies = user.hobbies.split(', ');
+        const hobbies = (user.hobbies || "").split(', ').filter(h => h);
 
         
 
@@ -134,20 +128,18 @@ router.get('/suggestTasks', fetchuser, [
             
             if (tasks.length === 0) continue;
 
-            let attempts = 0;
-            while(attempts < tasks.length){
-                let randomIndex = Math.floor(Math.random() * tasks.length);
-                let listItem = await SuggestedTodoList.findOne({ content: tasks[randomIndex].Content });
-                if(!listItem){
-                    listItem = new TodoList({
-                        content: tasks[randomIndex].Content,
-                        user : req.user.id,
+            const shuffled = tasks.sort(() => Math.random() - 0.5);
+            for (const task of shuffled) {
+                const existing = await SuggestedTodoList.findOne({ content: task.Content, user: req.user.id });
+                if (!existing) {
+                    const listItem = new TodoList({
+                        content: task.Content,
+                        user: req.user.id,
                         type: "suggested"
                     });
                     await listItem.save();
                     break;
                 }
-                attempts++;
             }
         }
 

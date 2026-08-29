@@ -1,9 +1,17 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
 
+const safeJson = async (response, fallback = null) => {
+  if (!response || !response.ok) return fallback;
+  try {
+    return await response.json();
+  } catch {
+    return fallback;
+  }
+};
+
 const NoteState = (props) => {
   const host = import.meta.env.VITE_API_URL || "http://localhost:5000";
-  const notesInitial = [];
   const [notes, setNotes] = useState([]);
   const [allNotes, setAllNotes] = useState([]);
   const [tags, setTags] = useState([]);
@@ -27,7 +35,7 @@ const NoteState = (props) => {
       body: JSON.stringify({description, image, date })
     });
 
-    const json = await response.json();
+    const json = await safeJson(response, []);
     setDiary(json)
   }
 
@@ -40,7 +48,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ date })
     });
-    const json = await response.json();
+    const json = await safeJson(response, []);
     setDiary(json);
   }
 
@@ -53,7 +61,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ userid })
     });
-    const json = await response.json();
+    const json = await safeJson(response, []);
     setStats(json);
   }
 
@@ -66,7 +74,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ month, year, userid })  
     });
-    const json = await response.json();
+    const json = await safeJson(response, []);
     setDatesData(json);
   }
 
@@ -79,7 +87,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ month, year, userid })
     });
-    const json = await response.json();
+    const json = await safeJson(response, []);
     setTagsData(json);
   }
 
@@ -93,8 +101,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ date }),
     });
-    const json = await response.json();
-    //console.log(json)
+    const json = await safeJson(response, []);
     setNotes(json);
   };
 
@@ -107,8 +114,7 @@ const NoteState = (props) => {
         "auth-token": localStorage.getItem("token"),
       }
     });
-    const json = await response.json();
-    console.log(json)
+    const json = await safeJson(response, []);
     setTags(json);
   };
 
@@ -122,8 +128,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ tags }),
     });
-    const json = await response.json();
-    console.log(json)
+    const json = await safeJson(response, []);
     setAllNotes(json);
   };
 
@@ -136,8 +141,7 @@ const NoteState = (props) => {
         "auth-token": localStorage.getItem("token"),
       },
     });
-    const json = await response.json();
-    // console.log(json)
+    const json = await safeJson(response, []);
     setSharedNotes(json);
   };
 
@@ -151,44 +155,40 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ id }),
     });
-    const json = await response.json();
+    const json = await safeJson(response, []);
     setNoteItem(json);
   };
 
 
   const addNote = async (title, description, tag, image) => {
-    // TODO: API Call
-    // API Call
-    const response = await fetch(`${host}/api/notes/addnote`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-      body: JSON.stringify({ title, description, tag, image }),
-    });
-
-    console.log("Adding a new note");
-    const note = await response.json();
-
-    setNotes(notes.concat(note));
+    try {
+      const response = await fetch(`${host}/api/notes/addnote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ title, description, tag, image }),
+      });
+      if (!response.ok) return;
+      const note = await safeJson(response, {});
+      if (note && note._id) {
+        setNotes(notes.concat(note));
+      }
+    } catch (err) {
+      console.error("addNote failed:", err.message);
+    }
   };
 
   const deleteNote = async (id) => {
-    // TODO: API Call
-
-    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+    await fetch(`${host}/api/notes/deletenote/${id}`, {
       method: "Delete",
       headers: {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
     });
-
-    console.log("Deleting the note with id" + id);
-    const newNotes = notes.filter((note) => {
-      return note._id !== id;
-    });
+    const newNotes = notes.filter((note) => note._id !== id);
     setNotes(newNotes);
   };
 
@@ -202,7 +202,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag, shared:sharedUsers }),
     });
-    const json = response.json();
+    const json = await safeJson(response, []);
 
     // Logic to edit in client
     let newNotes = JSON.parse(JSON.stringify(notes));
@@ -229,43 +229,39 @@ const NoteState = (props) => {
         "auth-token": localStorage.getItem("token"),
       },
     });
-    const json = await response.json();
-    console.log(json)
+    const json = await safeJson(response, []);
     setTodoList(json);
   };
 
   const addListItem = async (content) => {
-    // TODO: API Call
-    // API Call
-    const response = await fetch(`${host}/api/todolist/addListItem`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-      body: JSON.stringify({content}),
-    });
-
-    console.log("Adding a new List Item");
-    const listItem = await response.json();
-    setTodoList(todoList.concat(listItem));
+    try {
+      const response = await fetch(`${host}/api/todolist/addListItem`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({content}),
+      });
+      if (!response.ok) return;
+      const listItem = await safeJson(response, {});
+      if (listItem && listItem._id) {
+        setTodoList(todoList.concat(listItem));
+      }
+    } catch (err) {
+      console.error("addListItem failed:", err.message);
+    }
   };
 
   const deleteListItem = async (id) => {
-    // TODO: API Call
-
-    const response = await fetch(`${host}/api/todolist/deleteListItem/${id}`, {
+    await fetch(`${host}/api/todolist/deleteListItem/${id}`, {
       method: "Delete",
       headers: {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
     });
-
-    console.log("Deleting the ListItem with id" + id);
-    const newTodoList = todoList.filter((listItem) => {
-      return listItem._id !== id;
-    });
+    const newTodoList = todoList.filter((listItem) => listItem._id !== id);
     setTodoList(newTodoList);
   };
 
@@ -279,13 +275,14 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ status, content })
     });
-    const json = response.json();
+    const json = await safeJson(response, []);
 
     // Logic to edit in client
     let newTodoList = JSON.parse(JSON.stringify(todoList));
     for (let index = 0; index < newTodoList.length; index++) {
       if (newTodoList[index]._id === id) {
         newTodoList[index].status = status;
+        if (content) newTodoList[index].content = content;
         break;
       }
     }
@@ -302,8 +299,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ userid })
     });
-    const json = await response.json();
-    //console.log(json)
+    const json = await safeJson(response, []);
     setUser(json);
   };
 
@@ -317,8 +313,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ name, mobile, password, hobbies, profileImage, bio })
     });
-    const json = await response.json();
-    //console.log(json)
+    const json = await safeJson(response, []);
     setUser(json);
   };
 
@@ -331,8 +326,7 @@ const NoteState = (props) => {
         "auth-token": localStorage.getItem("token"),
       }
     });
-    const json = await response.json();
-    // console.log(json)
+    const json = await safeJson(response, []);
     setAllUsers(json);
   };
 
@@ -345,8 +339,7 @@ const NoteState = (props) => {
         "auth-token": localStorage.getItem("token"),
       }
     });
-    const json = await response.json();
-    // console.log(json)
+    const json = await safeJson(response, []);
     if(json.success){
       getTodoList();
     }

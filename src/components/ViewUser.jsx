@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Select from 'react-select';
 import noteContext from "../context/notes/noteContext"
 // import "./pro.css";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PieChart, Pie, Tooltip, Sector, Cell, Label, BarChart,
   Bar,
   XAxis,
@@ -15,6 +15,7 @@ import { PieChart, Pie, Tooltip, Sector, Cell, Label, BarChart,
 function ViewUser( props ) {
   const context = useContext(noteContext);
   const params = useParams();
+  const navigate = useNavigate();
 
   const { user, getUser, updateUser, getTagsData, tagsData, datesData, getDatesData, stats, getStats } = context;
   const [updatedUser, setUpdatedUser] = useState({
@@ -142,10 +143,13 @@ function ViewUser( props ) {
     setSelectedOptions(selected);
   };
 
+  const currentDate = new Date();
+  const currentMonthStr = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const currentYearStr = String(currentDate.getFullYear());
+
   const handleMonthChange = (selected) => {
     setSelectedMonth(selected);
-    console.log(selected);
-    getDatesData(selected.value, "2023", params.userid);
+    getDatesData(selected.value, currentYearStr, params.userid);
   };
 
   const [alert, setAlert] = useState(null);
@@ -160,20 +164,20 @@ function ViewUser( props ) {
   }
 
   useEffect(() => {
-    console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
       getUser(params.userid);
-      getTagsData("07", "2023", params.userid);
-      getDatesData("07", "2023", params.userid);
-      console.log(user);
+      getTagsData(currentMonthStr, currentYearStr, params.userid);
+      getDatesData(currentMonthStr, currentYearStr, params.userid);
       getStats(params.userid);
     } else {
-      Navigate("/login");
+      navigate("/login");
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.userid]);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     const base64 = await convertToBase64(file);
     setUpdatedUser({...updatedUser, profileImage: base64})
   };
@@ -195,7 +199,7 @@ function ViewUser( props ) {
   }
 
   const updateProfile = () => {
-      if(updatedUser.password.length != 0 || updatedUser.cnfPassword.length != 0){
+      if(updatedUser.password.length !== 0 || updatedUser.cnfPassword.length !== 0){
         if(updatedUser.password !== updatedUser.cnfPassword){
           showAlert("Passwords Not Matched", "danger"); return;
         }
@@ -226,7 +230,7 @@ function ViewUser( props ) {
       <a href="#" className="btn d-none" ref={refM} data-bs-toggle="modal" data-bs-target="#modal-report">
         Update Profile
       </a>
-      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabIndex="-1" role="dialog" aria-hidden="true">
         <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -265,11 +269,11 @@ function ViewUser( props ) {
               <div className="mb-3 row">
                 <div className="col-6">
                   <label className="form-label">Update Password</label>
-                  <input type="text" className="form-control" name="password" value={updatedUser.password} onChange={handleProfileChange} />
+                  <input type="password" className="form-control" name="password" value={updatedUser.password} onChange={handleProfileChange} />
                 </div>
                 <div className="col-6">
                   <label className="form-label">Re-Enter Password</label>
-                  <input type="text" className="form-control" name="cnfPassword" value={updatedUser.cnfPassword} onChange={handleProfileChange} />
+                  <input type="password" className="form-control" name="cnfPassword" value={updatedUser.cnfPassword} onChange={handleProfileChange} />
                 </div>
               </div>
             </div>

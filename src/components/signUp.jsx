@@ -65,8 +65,6 @@ const Signup = (props) => {
             setShowotp(true);
             setIsLoading(false);
             props.showAlert("OTP sended successfully","success")
-
-              console.log("otp sent")
           } else {
               setIsLoading(false);
               props.showAlert("error","danger");
@@ -78,10 +76,8 @@ const Signup = (props) => {
 
     if (otp === "") {
       props.showAlert("Enter Your Otp","danger")
-    } else if (!/[^a-zA-Z]/.test(otp)) {
-      props.showAlert("Enter Valid Otp","danger")
-    } else if (otp.length < 6) {
-      props.showAlert("Otp Length minimum 6 digit","danger")
+    } else if (!/^[0-9]{6}$/.test(otp)) {
+      props.showAlert("OTP must be 6 digits","danger")
     } else {
 
       const response = await fetch(`${API_URL}/api/auth/userotpverify`, {
@@ -95,7 +91,6 @@ const Signup = (props) => {
         setShowotp(false)
         setNxt(true)
         props.showAlert("Email verified successfully","success")
-        console.log("otp verified")
       } else {
         props.showAlert("error","danger")
       }
@@ -108,25 +103,26 @@ const Signup = (props) => {
         // e.preventDefault();
 
         
-        const response = await fetch(`${API_URL}/api/auth/createuser`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name:credentials.name, email: credentials.email, password: credentials.password ,mobile:credentials.mobile,hobbies:hobbies})
-        });
-        const json = await response.json()
-        console.log(json);
-        if (json.success) {
-            // Save the auth token and redirect
-            localStorage.setItem('token', json.authToken)
-            navigate('/');
-            props.showAlert("Account created successfully", "success");
-
-        }
-        else {
-          const errorMsg = json.errors ? json.errors[0].msg : (json.error || "An error occurred");
-          props.showAlert(errorMsg, "danger");
+        try {
+            const response = await fetch(`${API_URL}/api/auth/createuser`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name:credentials.name, email: credentials.email, password: credentials.password ,mobile:credentials.mobile,hobbies:hobbies})
+            });
+            const json = await response.json().catch(() => ({}));
+            if (response.ok && json.success) {
+                localStorage.setItem('token', json.authToken)
+                navigate('/');
+                props.showAlert("Account created successfully", "success");
+            }
+            else {
+                const errorMsg = json.errors ? json.errors[0].msg : (json.error || "An error occurred");
+                props.showAlert(errorMsg, "danger");
+            }
+        } catch (err) {
+            props.showAlert("Network error. Please try again.", "danger");
         }
     }
 
@@ -137,7 +133,7 @@ const Signup = (props) => {
     // const{ handleSubmit}=useForm()
 
     const completeFormStep=()=>{
-      if(formStep==1){ 
+      if(formStep===1){ 
       if(credentials.mobile.length !==10){
         props.showAlert("Enter Valid Mobile Number", "danger");
         return;

@@ -16,7 +16,6 @@ const SharedNotes = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
       getSharedNotes();
     } else {

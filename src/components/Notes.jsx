@@ -23,10 +23,7 @@ const Notes = (props) => {
   const [postImage, setPostImage] = useState([]);
 
    useEffect(() => {
-    console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
-      console.log(token);
-
       const currentDate = new Date();
 
       const day = String(currentDate.getDate()).padStart(2, "0");
@@ -34,13 +31,14 @@ const Notes = (props) => {
       const year = currentDate.getFullYear();
 
       const date = `${day}/${month}/${year}`;
-      console.log(date);
-
       getNotes(date);
       getAllUsers();
     } else {
       navigate("/login");
     }
+    return () => {
+      if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+    };
   }, []);
 
   const ref = useRef(null);
@@ -75,6 +73,7 @@ const Notes = (props) => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     const base64 = await convertToBase64(file);
     
     setPostImage([...postImage, base64]);
@@ -101,20 +100,18 @@ const Notes = (props) => {
   };
 
   const [alert, setAlert] = useState(null);
+  const alertTimeoutRef = useRef(null);
   const showAlert = (message, type) => {
-    setAlert({
-      msg: message,
-      type: type
-    })
-    setTimeout(() => {
+    setAlert({ msg: message, type: type });
+    if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+    alertTimeoutRef.current = setTimeout(() => {
       setAlert(null);
     }, 1500);
   }
 
   const handleClick = (e) => {
     e.preventDefault();
-    // console.log(postImage);
-    if(note.tag.toUpperCase()=="DIARY"){
+    if(note.tag && note.tag.toUpperCase()==="DIARY"){
       showAlert("Tag should not be DIARY", "danger"); return;
     }
 
@@ -123,6 +120,13 @@ const Notes = (props) => {
     setNote({ title: "", description: "", tag: " " });
     setPostImage([]);
     props.showAlert("Note Added Successfully", "success");
+  };
+
+  const handleUpdateClick = (e) => {
+    e.preventDefault();
+    editNote(note.id, note.etitle, note.edescription, note.etag, note.shared || []);
+    refC.current.click();
+    props.showAlert("Note Updated Successfully", "success");
   };
 
   const handleDeleteClick = (e) => {
@@ -158,7 +162,6 @@ const Notes = (props) => {
 
   const shareToUsers = () =>{
     // const sharedUsers = selectedOptions.map(item => item.value);
-    console.log(selectedOptions);
     editNote(note.id, note.etitle, note.edescription, note.etag, selectedOptions);
     refSC.current.click();
     props.showAlert("Note Shared Successfully", "success");
@@ -181,13 +184,13 @@ const Notes = (props) => {
         Add Note
       </button>
 
-      <Link className="btn mx-2" style={{color: "#1A1C1E !important"}} to="/notesbytags">Search By Tags</Link>
+      <Link className="btn mx-2" style={{color: "#1A1C1E"}} to="/notesbytags">Search By Tags</Link>
             
       <button
         ref={ref}
         type="button"
         className="btn d-none"
-        style={{color: "#1A1C1E !important"}}
+        style={{color: "#1A1C1E"}}
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
@@ -267,11 +270,11 @@ const Notes = (props) => {
                 Close
               </button>
               <button
-                onClick={handleClick}
+                onClick={handleUpdateClick}
                 
                 type="button"
                 className="btn"
-                style={{color: "#1A1C1E !important"}}
+                style={{color: "#1A1C1E"}}
               >
                 Update Note
               </button>
@@ -282,37 +285,34 @@ const Notes = (props) => {
 
       <a
         ref={refD}
-        class="btn d-none"
+        className="btn d-none"
         data-bs-toggle="modal"
         data-bs-target="#modal-danger"
       >
         Danger modal
       </a>
 
-      <div
-        class="modal modal-blur fade"
+      <div className="modal modal-blur fade"
         id="modal-danger"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-hidden="true"
       >
-        <div
-          class="modal-dialog modal-sm modal-dialog-centered"
+        <div className="modal-dialog modal-sm modal-dialog-centered"
           role="document"
         >
-          <div class="modal-content">
+          <div className="modal-content">
             <button
               type="button"
               ref={refCD}
-              class="btn-close"
+              className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
-            <div class="modal-status bg-danger"></div>
-            <div class="modal-body text-center py-4">
+            <div className="modal-status bg-danger"></div>
+            <div className="modal-body text-center py-4">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon mb-2 text-danger icon-lg"
+                xmlns="http://www.w3.org/2000/svg" className="icon mb-2 text-danger icon-lg"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -327,21 +327,21 @@ const Notes = (props) => {
                 <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
               </svg>
               <h3>Are you sure?</h3>
-              <div class="text-muted">
+              <div className="text-muted">
                 Do you really want to Delete Note{" "}
               </div>{" "}
               {deleteTitle} ?
             </div>
-            <div class="modal-footer">
-              <div class="w-100">
-                <div class="row">
-                  <div class="col">
-                    <a ref={refCD} class="btn w-100" data-bs-dismiss="modal">
+            <div className="modal-footer">
+              <div className="w-100">
+                <div className="row">
+                  <div className="col">
+                    <a ref={refCD} className="btn w-100" data-bs-dismiss="modal">
                       Cancel
                     </a>
                   </div>
-                  <div class="col">
-                    <a onClick={handleDeleteClick} class="btn btn-danger w-100">
+                  <div className="col">
+                    <a onClick={handleDeleteClick} className="btn btn-danger w-100">
                       Delete Note
                     </a>
                   </div>
@@ -353,18 +353,16 @@ const Notes = (props) => {
       </div>
 
       
-      <div
-        class="modal modal-blur fade"
+      <div className="modal modal-blur fade"
         id="AddNote"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-hidden="true"
       >
-        <div
-          class="modal-dialog modal-lg modal-dialog-centered"
+        <div className="modal-dialog modal-lg modal-dialog-centered"
           role="document"
         >
-          <div class="modal-content">
+          <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" style={{color:"#1A1C1E"}}>Add a Note</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -374,7 +372,7 @@ const Notes = (props) => {
                 <strong>{capitalize(alert.type)}</strong>: {alert.msg} 
               </div>}
             </div>
-            <div class="modal-body py-4 row">
+            <div className="modal-body py-4 row">
                   <div className="mb-3 col-6">
                     <label className="form-label">Title</label>
                     <input type="text" className="form-control" placeholder="Give a title!" id="title" name="title" value={note.title} aria-describedby="emailHelp" onChange={onChange}/>
@@ -402,7 +400,7 @@ const Notes = (props) => {
                     <div className="row">
                     {postImage.map((img, index) => (
                           <div className="col-3" key={index}>
-                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#1A1C1E"}} onClick={() => removeImage(index)}><i class="las la-backspace fs-2"></i></div>
+                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#1A1C1E"}} onClick={() => removeImage(index)}><i className="las la-backspace fs-2"></i></div>
                               <img src={img} alt="Stored Image" style={{ width: "150px" }} />
                           </div>
                       ))}
@@ -411,7 +409,7 @@ const Notes = (props) => {
               
               
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button ref={refANC} className="btn btn-outline" data-bs-dismiss="modal">
                 Cancel
               </button>
@@ -425,10 +423,10 @@ const Notes = (props) => {
 
 
 
-      <a href="#" class="btn d-none" ref={refS} data-bs-toggle="modal" data-bs-target="#modal-report">
+      <a href="#" className="btn d-none" ref={refS} data-bs-toggle="modal" data-bs-target="#modal-report">
         Share Note
       </a>
-      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabIndex="-1" role="dialog" aria-hidden="true">
         <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">

@@ -1,6 +1,4 @@
-import {React,useState ,createRef, useContext, useEffect } from 'react'
-import { DefaultPlayer as Video } from 'react-html5video';
-import 'react-html5video/dist/styles.css'
+import {React, useState, useContext, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
 
@@ -46,15 +44,15 @@ const Viewnote = () => {
     setOpenModal(false);
   }
 
-  // Previous Image
   const prevSlide = () => {
+    if (!noteItem || !noteItem.image || noteItem.image.length === 0) return;
     slideNumber === 0 
     ? setSlideNumber( noteItem.image.length -1 ) 
     : setSlideNumber( slideNumber - 1 )
   }
 
-  // Next Image  
   const nextSlide = () => {
+    if (!noteItem || !noteItem.image || noteItem.image.length === 0) return;
     slideNumber + 1 === noteItem.image.length ? setSlideNumber(0) : setSlideNumber(slideNumber + 1)
   }
 
@@ -76,7 +74,7 @@ const Viewnote = () => {
       </div>
       <div className='col-6'>
       <div className="" style={{textAlign:"right",fontSize:"1rem",color:"#1A1C1E"}}>
-          Date: <b>{(noteItem && noteItem.description) && noteItem.date}</b>
+          Date: <b>{noteItem && noteItem.date}</b>
           <br></br>
           Tag: <b>{(noteItem===null)?'':noteItem.tag}</b>
       </div>
@@ -91,24 +89,24 @@ const Viewnote = () => {
         </div> */}
       
         {/* <div className="" style={{textAlign:"right",fontSize:"1.5rem",color:"#1A1C1E"}}>
-          {(noteItem && noteItem.description) && noteItem.date}
+          {noteItem && noteItem.date}
           
         </div> */}
         <br />
         <br />
     
-        {/* <div class="card bg-light">
-    <div class="card-body text-center">
-      <p class="card-text">{(noteItem && noteItem.description) && <div className="textbox" dangerouslySetInnerHTML={{ __html: noteItem.description }} />}</p>
+        {/* <div className="card bg-light">
+    <div className="card-body text-center">
+      <p className="card-text">{(noteItem && noteItem.description) && <div className="textbox" dangerouslySetInnerHTML={{ __html: noteItem.description }} />}</p>
     </div>
   </div> */}
        {/* {(noteItem && noteItem.description) && <div className="textbox" dangerouslySetInnerHTML={{ __html: noteItem.description }} />} */}
        
       <div className='row'>
         <div className='col-7'>
-        <div class="card" style={{borderRadius:"10px", backgroundColor:"#FFFFFF"} }>
-    <div class="card-body text-center">
-      <p class="card-text">{(noteItem && noteItem.description) && <div  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(noteItem.description) }} />}</p>
+        <div className="card" style={{borderRadius:"10px", backgroundColor:"#FFFFFF"} }>
+    <div className="card-body text-center">
+      {(noteItem?.description) && <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(noteItem.description) }} />}
     </div>
   </div>
         {/* {(noteItem && noteItem.description) && <div className="textbox" dangerouslySetInnerHTML={{ __html: noteItem.description }} />} */}
@@ -116,7 +114,7 @@ const Viewnote = () => {
 
       
 
-      {openModal && 
+      {openModal && noteItem && noteItem.image && noteItem.image.length > 0 && 
         <div className='sliderWrap'>
           <FontAwesomeIcon icon={faCircleXmark} className='btnClose' onClick={handleCloseModal}  />
           <FontAwesomeIcon icon={faCircleChevronLeft} className='btnPrev' onClick={prevSlide} />
@@ -131,7 +129,7 @@ const Viewnote = () => {
       {openPhotos&& <div className='row'>
         {
           
-          (noteItem!=null)&&(noteItem.image.length>0) && noteItem.image.map((img, index) => {
+          (noteItem!==null)&&(noteItem.image.length>0) && noteItem.image.map((img, index) => {
             return(
               <div 
                 className='col-6 my-1 p-1' 

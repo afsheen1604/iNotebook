@@ -141,7 +141,7 @@ router.put("/updateDiary", fetchuser, async (req, res) => {
 
     if(!note){
 
-       let note = new Notes({
+       note = new Notes({
         title: newnote.title,
         description: newnote.description,
         tag: "DIARY", 
@@ -180,6 +180,14 @@ router.put("/updateDiary", fetchuser, async (req, res) => {
 router.post("/fetchnote", fetchuser, async (req, res) => {
   try {
     const note = await Notes.findById(req.body.id);
+    if (!note) {
+      return res.status(404).send("Not Found");
+    }
+    const isOwner = note.user.toString() === req.user.id;
+    const isShared = note.shared && note.shared.some(s => s.value === req.user.id);
+    if (!isOwner && !isShared) {
+      return res.status(403).send("Not Allowed");
+    }
     res.json(note);
   } catch (error) {
     console.error(error.message);
@@ -191,12 +199,12 @@ router.post("/getAllNotes", fetchuser, async (req, res) => {
   try {
     // const tagsArray = ['note', 'Casual'];
     let notes;
-    if(req.body.tags.length==0){
+    if(req.body.tags.length===0){
       notes = await Notes.find({ user: req.user.id, tag: { $ne: "DIARY" } }).sort({ date: -1 });
       res.json(notes);
     }
     else{
-      tagnotes = await Notes.find({ user: req.user.id, tag: { $in: req.body.tags } }).sort({ date: -1 });
+      const tagnotes = await Notes.find({ user: req.user.id, tag: { $in: req.body.tags } }).sort({ date: -1 });
       res.json(tagnotes);
     }
   } catch (error) {
@@ -334,7 +342,7 @@ router.post("/tagsData", fetchuser, async (req, res) => {
   try {
     
     let user;
-    if(req.body.userid.length!=0){
+    if(req.body.userid.length!==0){
       user = req.body.userid;
     }
     else{
@@ -384,10 +392,11 @@ router.post("/tagsData", fetchuser, async (req, res) => {
 router.post("/datesData", fetchuser, async (req, res) => {
   try {
     const startMoment = moment(`${req.body.year}-${req.body.month}-01`);
-    const endMoment = moment(`${req.body.year}-${req.body.month}-30`);
+    const endMoment = moment(startMoment).endOf('month');
+    const lastDay = String(endMoment.date()).padStart(2, '0');
 
     let user;
-    if(req.body.userid.length!=0){
+    if(req.body.userid.length!==0){
       user = req.body.userid;
     }
     else{
@@ -405,7 +414,7 @@ router.post("/datesData", fetchuser, async (req, res) => {
       {
         $match: {
           user: new mongoose.Types.ObjectId(user),
-          date: { $gte: `01/${req.body.month}/${req.body.year}`, $lte: `30/${req.body.month}/${req.body.year}` } // Date strings in the correct format
+          date: { $gte: `01/${req.body.month}/${req.body.year}`, $lte: `${lastDay}/${req.body.month}/${req.body.year}` }
         }
       },
       {
@@ -455,7 +464,7 @@ router.post('/getstats', fetchuser, async(req,res)=>{
     
   try {
     let user;
-    if(req.body.userid.length!=0){
+    if(req.body.userid.length!==0){
       user = req.body.userid;
     }
     else{
@@ -469,7 +478,8 @@ router.post('/getstats', fetchuser, async(req,res)=>{
     
 
   } catch (error) {
-      res.status(400).json({ error: "Invalid Details", error })
+      console.error("getstats error:", error.message);
+      res.status(400).json({ error: "Invalid Details" })
   }
 });
 

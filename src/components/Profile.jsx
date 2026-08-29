@@ -52,6 +52,24 @@ function Profile( props ) {
     { value: '12', label: 'December' }
   ];
 
+  const theme = {
+    bg: "#F8F6F0",
+    card: "#FFFFFF",
+    cardAlt: "#F3EEE3",
+    accent: "#C49A45",
+    sidebar: "#1A1C1E",
+    sage: "#6E8B74",
+    text: "#1F2421",
+    textMuted: "#6B7280",
+    border: "#E5E0D8",
+    shadow: "0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)",
+  };
+
+  const fonts = {
+    heading: "'Playfair Display', serif",
+    body: "'Inter', sans-serif",
+  };
+
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -96,12 +114,10 @@ function Profile( props ) {
   }
 
   useEffect(() => {
-    console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
       getUser("");
       getTagsData(currentMonth, currentYear, "");
       getDatesData(currentMonth, currentYear, "");
-      console.log(user);
       getStats("");
     } else {
       navigate("/login");
@@ -110,6 +126,7 @@ function Profile( props ) {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     const base64 = await convertToBase64(file);
     setUpdatedUser({...updatedUser, profileImage: base64})
   };
@@ -136,7 +153,7 @@ function Profile( props ) {
   }
 
   const updateProfile = () => {
-      if(updatedUser.password.length != 0 || updatedUser.cnfPassword.length != 0){
+      if(updatedUser.password.length !== 0 || updatedUser.cnfPassword.length !== 0){
         if(updatedUser.password !== updatedUser.cnfPassword){
           showAlert("Passwords Not Matched", "danger"); return;
         }
@@ -161,24 +178,6 @@ function Profile( props ) {
     const lower = word.toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);
   }
-
-  const theme = {
-    bg: "#F8F6F0",
-    card: "#FFFFFF",
-    cardAlt: "#F3EEE3",
-    accent: "#C49A45",
-    sidebar: "#1A1C1E",
-    sage: "#6E8B74",
-    text: "#1F2421",
-    textMuted: "#6B7280",
-    border: "#E5E0D8",
-    shadow: "0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)",
-  };
-
-  const fonts = {
-    heading: "'Playfair Display', serif",
-    body: "'Inter', sans-serif",
-  };
 
   const initials = (user.name || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
   const defaultAvatar = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect fill="#C49A45" width="300" height="300"/><text fill="#fff" font-family="Arial" font-size="120" font-weight="600" x="50%" y="50%" dominant-baseline="central" text-anchor="middle">${initials}</text></svg>`)}`;

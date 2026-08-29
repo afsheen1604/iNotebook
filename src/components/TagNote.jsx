@@ -72,7 +72,6 @@ const TagNote = (props) => {
 
   const searchByTags = () => {
     const labelsArray = selectedTags.map(item => item.label);
-    console.log(labelsArray);
     getAllNotes(labelsArray);
   }
 
@@ -90,7 +89,6 @@ const TagNote = (props) => {
 
   const shareToUsers = () =>{
     // const sharedUsers = selectedOptions.map(item => item.value);
-    console.log(selectedOptions);
     editNote(note.id, note.etitle, note.edescription, note.etag, selectedOptions);
     refSC.current.click();
     props.showAlert("Note Shared Successfully", "success");
@@ -158,37 +156,34 @@ const TagNote = (props) => {
 
       <a
         ref={refD}
-        class="btn d-none"
+        className="btn d-none"
         data-bs-toggle="modal"
         data-bs-target="#modal-danger"
       >
         Danger modal
       </a>
 
-      <div
-        class="modal modal-blur fade"
+      <div className="modal modal-blur fade"
         id="modal-danger"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-hidden="true"
       >
-        <div
-          class="modal-dialog modal-sm modal-dialog-centered"
+        <div className="modal-dialog modal-sm modal-dialog-centered"
           role="document"
         >
-          <div class="modal-content">
+          <div className="modal-content">
             <button
               type="button"
               ref={refCD}
-              class="btn-close"
+              className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
-            <div class="modal-status bg-danger"></div>
-            <div class="modal-body text-center py-4">
+            <div className="modal-status bg-danger"></div>
+            <div className="modal-body text-center py-4">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon mb-2 text-danger icon-lg"
+                xmlns="http://www.w3.org/2000/svg" className="icon mb-2 text-danger icon-lg"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -203,21 +198,21 @@ const TagNote = (props) => {
                 <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
               </svg>
               <h3>Are you sure?</h3>
-              <div class="text-muted">
+              <div className="text-muted">
                 Do you really want to Delete Note{" "}
               </div>{" "}
               {deleteTitle} ?
             </div>
-            <div class="modal-footer">
-              <div class="w-100">
-                <div class="row">
-                  <div class="col">
-                    <a ref={refCD} class="btn w-100" data-bs-dismiss="modal">
+            <div className="modal-footer">
+              <div className="w-100">
+                <div className="row">
+                  <div className="col">
+                    <a ref={refCD} className="btn w-100" data-bs-dismiss="modal">
                       Cancel
                     </a>
                   </div>
-                  <div class="col">
-                    <a onClick={handleDeleteClick} class="btn btn-danger w-100">
+                  <div className="col">
+                    <a onClick={handleDeleteClick} className="btn btn-danger w-100">
                       Delete Note
                     </a>
                   </div>
@@ -229,10 +224,10 @@ const TagNote = (props) => {
       </div>
 
 
-      <a href="#" class="btn d-none" ref={refS} data-bs-toggle="modal" data-bs-target="#modal-report">
+      <a href="#" className="btn d-none" ref={refS} data-bs-toggle="modal" data-bs-target="#modal-report">
         Share Note
       </a>
-      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabIndex="-1" role="dialog" aria-hidden="true">
         <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">

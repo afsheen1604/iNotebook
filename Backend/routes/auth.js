@@ -53,7 +53,6 @@ router.post('/createuser', [
         //check weather Email exist already
         let success = false;
         let user = await User.findOne({ email: req.body.email });
-        //console.log(user);
         if (user) {
             return res.status(400).json({success, error: "Email already exists" });
         }
@@ -99,7 +98,6 @@ router.post('/login', [
 
     try {
         let user = await User.findOne({ email: req.body.email });
-        //console.log(user);
         if (!user) {
             success = false
             return res.status(400).json({ error: "Invalid Credentials" });
@@ -135,7 +133,7 @@ router.post('/getuser', fetchuser,  async (req, res) => {
       const userId = req.user.id;
       const requserid  = req.body.userid;
       let user;
-      if(requserid.length == 0){ 
+      if(requserid.length === 0){ 
         user = await User.findById(userId).select("-password")
       }
       else{
@@ -184,23 +182,23 @@ router.post('/updateUser', fetchuser,  async (req, res) => {
         const { name, mobile, hobbies, profileImage, password, bio } = req.body;
 
         const updatedUser = {};
-        if(name.length !=0){
+        if(name.length !==0){
             updatedUser.name = name;
         }
-        if(password.length !=0){
+        if(password.length !==0){
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(password, salt);
             updatedUser.password = secPass;
         }
-        if(mobile.length !=0){
+        if(mobile.length !==0){
             updatedUser.mobile = mobile;
         }
         if(profileImage === "remove"){
             updatedUser.profileImage = "";
-        } else if(profileImage.length !=0){
+        } else if(profileImage.length !==0){
             updatedUser.profileImage = profileImage;
         }
-        if(hobbies.length !=0){
+        if(hobbies.length !==0){
             updatedUser.hobbies = hobbies;
         }
         if(bio !== undefined){
@@ -227,7 +225,7 @@ router.post('/forgotPassword',  async (req, res) => {
         const { reqemail, password, otp } = req.body;
 
         const otpRecord = await userotp.findOne({ email: reqemail });
-        if (!otpRecord || otpRecord.otp !== otp) {
+        if (!otpRecord || String(otpRecord.otp) !== String(otp)) {
             return res.status(400).json({ error: "Invalid or expired OTP" });
         }
 
@@ -253,85 +251,54 @@ router.post('/forgotPassword',  async (req, res) => {
 router.post('/userotpsend',async(req,res)=>{
     const {email,heading,purpose}=req.body;
     if (!email) {
-        res.status(400).json({ error: "Please Enter Your Email" })
+        return res.status(400).json({ error: "Please Enter Your Email" })
     }
     try{
         const OTP = Math.floor(100000 + Math.random() * 900000);
         const emailContentWithOTP = getEmailContentWithOTP(OTP,heading,purpose);
 
-            const existEmail = await userotp.findOne({ email: email });
+        const existEmail = await userotp.findOne({ email: email });
 
+        if (existEmail) {
+            await userotp.findByIdAndUpdate(existEmail._id, { otp: OTP, expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
+        } else {
+            await new userotp({ email, otp: OTP }).save();
+        }
 
-            if (existEmail) {
-                const updateData = await userotp.findByIdAndUpdate({ _id: existEmail._id }, {
-                    otp: OTP
-                }, { new: true }
-                );
-                await updateData.save();
-
-                const mailOptions = {
-                    from: process.env.EMAIL_USER,
-                    to: email,
-                    subject: "Sending Email For Otp Validation",
-                    html: emailContentWithOTP
-                }
-
-
-                tarnsporter.sendMail(mailOptions, (error, info) => {
-                    if (error) {
-                        console.log("error", error);
-                        res.status(400).json({ error: "email not send" })
-                    } else {
-                        console.log("Email sent", info.response);
-                        res.status(200).json({ message: "Email sent Successfully" })
-                    }
-                })
-    }
-    else {
-
-        const saveOtpData = new userotp({
-            email, otp: OTP
-        });
-
-        await saveOtpData.save();
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
             subject: "Sending Email For Otp Validation",
-            text: `OTP:- ${OTP}`
-        }
+            html: emailContentWithOTP
+        };
 
-        tarnsporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log("error", error);
-                res.status(400).json({ error: "email not send" })
-            } else {
-                console.log("Email sent", info.response);
-                res.status(200).json({ message: "Email sent Successfully" })
-            }
-        })
+        await tarnsporter.sendMail(mailOptions);
+        return res.status(200).json({ message: "Email sent Successfully" });
+    } catch (error) {
+        console.error("OTP send error:", error.message);
+        return res.status(400).json({ error: "Failed to send OTP email" });
     }
-}catch (error) {
-    res.status(400).json({ error: "Invalid Details", error })
-}
 })
 router.post('/userotpverify',async(req,res)=>{
     const {email,otp} = req.body;
 
     if(!otp || !email){
-        res.status(400).json({ error: "Please Enter Your OTP and email" })
+        return res.status(400).json({ error: "Please Enter Your OTP and email" })
+    }
+    if(!/^[0-9]{6}$/.test(otp)){
+        return res.status(400).json({ error: "OTP must be 6 digits" })
     }
     try {
         const otpverification = await userotp.findOne({email:email});
 
-        if(otpverification.otp === otp){
-            res.status(200).json({message:"Otp verified Successfully"})
+        if(otpverification && String(otpverification.otp) === String(otp)){
+            return res.status(200).json({message:"Otp verified Successfully"})
 
         }else{
-            res.status(400).json({error:"Invalid Otp"})
+            return res.status(400).json({error:"Invalid Otp"})
         }
     } catch (error) {
-        res.status(400).json({ error: "Invalid Details", error })
+        return res.status(400).json({ error: "Invalid Details" })
     }
 })
 

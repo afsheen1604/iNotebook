@@ -12,7 +12,6 @@ const TodoList = (props) => {
 
     useEffect(() => {
 
-        console.log(localStorage.getItem('token'));
         if (localStorage.getItem('token')) {
             getTodoList();
         }
@@ -53,19 +52,19 @@ const TodoList = (props) => {
               <div className="col-12 mb-2 fs-2" style={{color:"#1A1C1E"}}><h1>Todo List</h1></div>
               <div className="col-2"><p className="fs-3">{todoList.length} Tasks</p></div>
               <div className="col-5 task-filters">
-                <button className={`btn toggle-buttons ${listShow == "all" ? 'activetoggle': ''} `} id="all" onClick={toggleClick}>All</button>
-                <button className={`btn toggle-buttons ${listShow == "pending" ? 'activetoggle': ''} `} id="pending" onClick={toggleClick}>Active</button>
-                <button className={`btn toggle-buttons ${listShow == "completed" ? 'activetoggle': ''} `} id="completed" onClick={toggleClick}>Completed</button>
+                <button className={`btn toggle-buttons ${listShow === "all" ? 'activetoggle': ''} `} id="all" onClick={toggleClick}>All</button>
+                <button className={`btn toggle-buttons ${listShow === "pending" ? 'activetoggle': ''} `} id="pending" onClick={toggleClick}>Active</button>
+                <button className={`btn toggle-buttons ${listShow === "completed" ? 'activetoggle': ''} `} id="completed" onClick={toggleClick}>Completed</button>
               </div>
             </div>
             <div className="card-body">
               <div className="list-group list-group-flush list-group-hoverable">
-                {todoList.filter((item) => (listShow=='all' || item.status == listShow)).map((item) => {
+                {todoList.filter((item) => (listShow==='all' || item.status === listShow)).map((item) => {
                   return(
                     <div className="list-group-item" key={item._id} style={{backgroundColor:(item.status === 'completed' ? 'rgba(110,139,116,0.15)' : '#C49A452e')}}>
                       <div className="row align-items-center">
                         <div className="col-1">
-                          <input type="checkbox" className={`form-check-input ${item.status === 'completed' ? 'd-none' : ''}`} stylee={{backgroundColor:"#F8F6F0"}} onChange={(e)=>{if(e.target.checked){handleEditItem(item._id, "completed", item.content);} else{
+                          <input type="checkbox" className={`form-check-input ${item.status === 'completed' ? 'd-none' : ''}`} style={{backgroundColor:"#F8F6F0"}} onChange={(e)=>{if(e.target.checked){handleEditItem(item._id, "completed", item.content);} else{
                             handleEditItem(item._id, "pending", item.content);
                           }}}/>
                         </div>
@@ -88,13 +87,13 @@ const TodoList = (props) => {
 
             
             <div className="row align-items-end">
-             <div className="col-2"><button class="btn text-white" style={{backgroundColor:"#1A1C1E"}} onClick={suggestTasksFunc}>Suggest Tasks</button></div>
+             <div className="col-2"><button className="btn text-white" style={{backgroundColor:"#1A1C1E"}} onClick={suggestTasksFunc}>Suggest Tasks</button></div>
               
                 <div className="col-8">
                   <input type="text" value={listItem} onChange={onChange} className="form-control" />
                 </div>
                 <div className="col-2">
-                  <button className="btn btn-primary mt-2" style={{backgroundColor:"#1A1C1E"}}onClick={handleClick}> <i class="las la-plus-circle fs-1"></i> </button>
+                  <button className="btn btn-primary mt-2" style={{backgroundColor:"#1A1C1E"}}onClick={handleClick}> <i className="las la-plus-circle fs-1"></i> </button>
                 </div>
             </div>
          

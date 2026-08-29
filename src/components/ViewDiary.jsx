@@ -1,4 +1,4 @@
-import {React,useState ,createRef, useContext, useEffect } from 'react'
+import {React, useState, useContext, useEffect } from 'react'
 import 'react-html5video/dist/styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
@@ -35,7 +35,6 @@ const ViewDiary = (props) => {
   const navigate = useNavigate();
 
   const handleDateChange = (date) => {
-    // console.log(date);
     setSelectedDate(date);
     setChoosenDate(date.toLocaleDateString('en-GB'));
     getDiary(date.toLocaleDateString('en-GB'));
@@ -52,7 +51,6 @@ const ViewDiary = (props) => {
       const year = currentDate.getFullYear();
 
       const date = `${day}/${month}/${year}`;
-      console.log(date);
       setToday(date);
       setChoosenDate(date);
 
@@ -74,15 +72,15 @@ const ViewDiary = (props) => {
     setOpenModal(false);
   }
 
-  // Previous Image
   const prevSlide = () => {
+    if (!diary || !diary.image || diary.image.length === 0) return;
     slideNumber === 0 
     ? setSlideNumber( diary.image.length -1 ) 
     : setSlideNumber( slideNumber - 1 )
   }
 
-  // Next Image  
   const nextSlide = () => {
+    if (!diary || !diary.image || diary.image.length === 0) return;
     slideNumber + 1 === diary.image.length ? setSlideNumber(0) : setSlideNumber(slideNumber + 1)
   }
 
@@ -98,6 +96,7 @@ const ViewDiary = (props) => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     const base64 = await convertToBase64(file);
     
     setPostImage([...postImage, base64]);
@@ -109,7 +108,7 @@ const ViewDiary = (props) => {
   };
 
   const saveDiary = () => {
-      if(description.length<30){
+      if(!description || description.length < 30){
         props.showAlert("Description should be min of 30 characters", "danger"); return;
       }
       updateDiary(description, postImage, choosendate);
@@ -125,8 +124,8 @@ const ViewDiary = (props) => {
       <div className='p-4' style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
         <div className='d-flex justify-content-between align-items-center'>
           <p style={{textAlign:"center",fontSize:"2.5rem",color:"#1A1C1E"}}>Diary</p> 
-          {(today == choosendate && state=="A")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#1A1C1E"}} onClick={()=>{setState("E"); setDescription((diary)?diary.description:null); setPostImage((diary)?diary.image:[])}}>Edit</button>}
-          {/* {(today===choosendate && state=="E")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#1A1C1E"}} onClick={saveDiary}>Save</button>} */}
+          {(today === choosendate && state==="A")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#1A1C1E"}} onClick={()=>{setState("E"); setDescription((diary)?diary.description:null); setPostImage((diary)?diary.image:[])}}>Edit</button>}
+          {/* {(today===choosendate && state==="E")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#1A1C1E"}} onClick={saveDiary}>Save</button>} */}
         </div>
 
         <div className="textboxtitle" style={{position: "unset"}}>
@@ -135,9 +134,9 @@ const ViewDiary = (props) => {
 
         <div className='row mt-5'>
           
-          {(state=='A' && diary)?<div className='col-8'>{(diary.description) && <div className="" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(diary.description) }} />}
+          {(state==='A' && diary)?<div className='col-8'>{(diary.description) && <div className="" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(diary.description) }} />}
 
-          {openModal && 
+          {openModal && diary && diary.image && diary.image.length > 0 && 
             <div className='sliderWrap'>
               <FontAwesomeIcon icon={faCircleXmark} className='btnClose' onClick={handleCloseModal}  />
               <FontAwesomeIcon icon={faCircleChevronLeft} className='btnPrev' onClick={prevSlide} />
@@ -148,19 +147,19 @@ const ViewDiary = (props) => {
             </div>
           }
 
-          </div> : (state=='A')&&<div className='col-8 d-flex justify-content-center align-items-center'>
+          </div> : (state==='A')&&<div className='col-8 d-flex justify-content-center align-items-center'>
               <p style={{fontSize: "1.7rem"}}>Nothing Written</p>
           </div>
           }
 
-          {(state=="E") && 
+          {(state==="E") && 
 
           <div className='col-8'>
             <div className='card'>
                 <div className='card-body'>
                   <div className='mb-3'>
                     <label className="form-label">Description</label>
-                    <textarea className='form-control' rows={10} name='description' onChange={handleChange} value = {description} />
+                    <textarea className='form-control' rows={10} name='description' onChange={handleChange} value={description || ''} />
                   </div>
                   <div className='mb-3'>
                     <label className="form-label">Upload Images</label>
@@ -172,7 +171,7 @@ const ViewDiary = (props) => {
                     <div className="row">
                     {postImage.map((img, index) => (
                           <div className="col-3" key={index}>
-                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#1A1C1E"}} onClick={() => removeImage(index)}><i class="las la-backspace fs-2"></i></div>
+                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#1A1C1E"}} onClick={() => removeImage(index)}><i className="las la-backspace fs-2"></i></div>
                               <img src={img} alt="Stored Image" style={{ width: "150px" }} />
                           </div>
                       ))}
@@ -195,8 +194,8 @@ const ViewDiary = (props) => {
             </div>
           </div>
 
-          {(state=='A')&&<div className='col-12 galleryWrap' style={{position: "unset"}}>
-            {(diary!=null)&&(diary.image.length>0) && diary.image.map((img, index) => {
+          {(state==='A')&&<div className='col-12 galleryWrap' style={{position: "unset"}}>
+            {(diary!==null)&&(diary.image.length>0) && diary.image.map((img, index) => {
                 return(
                   <div 
                     className='single' 

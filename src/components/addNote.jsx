@@ -14,7 +14,6 @@ const AddNote = (props) => {
 
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
   const [postImage, setPostImage] = useState([]);
-  const [postVideo, setPostVideo] = useState([]);
 
   useEffect(() => {
     const backgroundImageUrl = `url(${img})`;
@@ -32,7 +31,6 @@ const AddNote = (props) => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    // console.log(postImage);
     addNote(note.title, note.description, note.tag, postImage);
     setNote({ title: "", description: "", tag: " " });
     setPostImage([]);
@@ -50,6 +48,7 @@ const AddNote = (props) => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     const base64 = await convertToBase64(file);
     
     setPostImage([...postImage, base64]);
