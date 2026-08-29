@@ -44,12 +44,11 @@ function App() {
     <>
       <NoteState>
         <Router>
-          <Navbar />
-          <div className="page-wrapper" style={{backgroundColor: '#F8F6F0'}}>
-            <div class="page-body m-0">
-              <div class="container-xl p-0">
-                <Alert alert={alert}/>
-                <Routes>
+          <div style={{display: "flex", minHeight: "100vh"}}>
+            <Navbar />
+            <div style={{flex: 1, marginLeft: localStorage.getItem('token') ? "240px" : "0", backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
+              <Alert alert={alert}/>
+              <Routes>
                   <Route exact path="/" element={<Profile showAlert={showAlert} />} />
                   <Route exact path="/notes" element={<Home showAlert={showAlert} />} />
                   <Route exact path="/ViewDiary" element={<ViewDiary showAlert={showAlert} />} />
@@ -63,7 +62,6 @@ function App() {
                   <Route exact path="/ViewUser/:userid" element={<ViewUser showAlert={showAlert} />} />
                   <Route exact path="/notesbytags" element={<TagNote showAlert={showAlert} />} />
                 </Routes>
-              </div>
             </div>
           </div>
         </Router>

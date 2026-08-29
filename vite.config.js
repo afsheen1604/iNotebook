@@ -10,6 +10,9 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
+    rollupOptions: {
+      input: 'index.html',
+    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
