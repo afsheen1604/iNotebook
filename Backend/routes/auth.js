@@ -75,7 +75,7 @@ router.post('/createuser', [
                 id: user.id
             }
         }
-        const authToken = jwt.sign(data, JWT_SECRET);
+        const authToken = jwt.sign(data, JWT_SECRET, { expiresIn: '7d' });
         success = true;
         res.json({success, authToken}); 
 
@@ -116,7 +116,7 @@ router.post('/login', [
                 id: user.id
             }
         }
-        const authToken = jwt.sign(data, JWT_SECRET);
+        const authToken = jwt.sign(data, JWT_SECRET, { expiresIn: '7d' });
 
         success = true;
         res.json({ success, authToken })

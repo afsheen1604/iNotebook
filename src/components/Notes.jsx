@@ -8,8 +8,8 @@ import AddNote from "./addNote";
 import {DayPicker} from 'react-day-picker';
 
 
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 import 'react-day-picker/dist/style.css'; // import the CSS file from the correct path
 

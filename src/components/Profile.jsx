@@ -52,7 +52,7 @@ function Profile( props ) {
     { value: '12', label: 'December' }
   ];
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div style={{background: theme.card, padding: "8px 12px", border: `1px solid ${theme.border}`, borderRadius: "8px", boxShadow: theme.shadow}}>

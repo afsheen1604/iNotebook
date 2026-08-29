@@ -1,6 +1,7 @@
 import {React,useState ,createRef, useContext, useEffect } from 'react'
 import 'react-html5video/dist/styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DOMPurify from 'dompurify';
 
 import {
   faCircleChevronLeft, 
@@ -134,7 +135,7 @@ const ViewDiary = (props) => {
 
         <div className='row mt-5'>
           
-          {(state=='A' && diary)?<div className='col-8'>{(diary.description) && <div className="" dangerouslySetInnerHTML={{ __html: diary.description }} />}
+          {(state=='A' && diary)?<div className='col-8'>{(diary.description) && <div className="" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(diary.description) }} />}
 
           {openModal && 
             <div className='sliderWrap'>

@@ -2,6 +2,7 @@ import {React,useState ,createRef, useContext, useEffect } from 'react'
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DOMPurify from 'dompurify';
 
 import {
   faCircleChevronLeft, 
@@ -107,7 +108,7 @@ const Viewnote = () => {
         <div className='col-7'>
         <div class="card" style={{borderRadius:"10px", backgroundColor:"#FFFFFF"} }>
     <div class="card-body text-center">
-      <p class="card-text">{(noteItem && noteItem.description) && <div  dangerouslySetInnerHTML={{ __html: noteItem.description }} />}</p>
+      <p class="card-text">{(noteItem && noteItem.description) && <div  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(noteItem.description) }} />}</p>
     </div>
   </div>
         {/* {(noteItem && noteItem.description) && <div className="textbox" dangerouslySetInnerHTML={{ __html: noteItem.description }} />} */}

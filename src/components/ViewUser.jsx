@@ -70,7 +70,7 @@ function ViewUser( props ) {
     return "";
   };
   
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div className="custom-tooltip">
