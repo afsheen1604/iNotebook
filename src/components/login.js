@@ -147,7 +147,7 @@ const Login = (props) => {
   }
 
     return (
-        <div className="mainlogin m-0 " style={{backgroundColor:"#5a1734"}}>
+        <div className="mainlogin m-0 " style={{backgroundColor:"#1A1C1E"}}>
             <div className="login_content">
               <div className="login_img" style={{backgroundColor:"#white"}}
               >
@@ -192,13 +192,13 @@ const Login = (props) => {
                 </label>
               </div> */}
               <div className="form-footer">
-                <button type="submit" onClick={handleSubmit} className="btn  w-100 " style={{backgroundColor:"#3f2b34d1",color:"white"}}>Sign in</button>
+                <button type="submit" onClick={handleSubmit} className="btn  w-100 " style={{backgroundColor:"#1A1C1E",color:"white"}}>Sign in</button>
               </div>
             
          
         
         <div className="text-center text-muted mt-3 " >
-          Don't have account yet? <Link to="/signup" style={{color:"#5a1734"}} tabIndex="-1">Sign up</Link>
+          Don't have account yet? <Link to="/signup" style={{color:"#1A1C1E"}} tabIndex="-1">Sign up</Link>
       </div>
       </section>)}
       {formStep===1 &&( <section>
@@ -212,14 +212,14 @@ const Login = (props) => {
               <div className="mb-3">
               <label htmlFor="otp" className='form-label'> Enter your OTP</label>
               <input type="text" name="otp" className="form-control"    onChange={(e) => setOtp(e.target.value)} placeholder='Enter your OTP'  />
-              <button className='btn w-100 mt-3'style={{backgroundColor:"#3f2b34d1",color:"white"}} onClick={verifyOtp}>Verify</button>
+              <button className='btn w-100 mt-3'style={{backgroundColor:"#1A1C1E",color:"white"}} onClick={verifyOtp}>Verify</button>
             </div>
             </div>
             
               )} 
               {send &&(
                 <div className="mt-3"> 
-              <button className='btn  w-100' style={{backgroundColor:"#3f2b34d1",color:"white"}} onClick={sendOtp} disabled={isLoading}>
+              <button className='btn  w-100' style={{backgroundColor:"#1A1C1E",color:"white"}} onClick={sendOtp} disabled={isLoading}>
                 {isLoading ?
                 <img src={spinner}></img>
                  : <span> Send OTP</span>}
@@ -245,7 +245,7 @@ const Login = (props) => {
                 <input type="password" className="form-control" value={updatepassword.cnewpassword}  onChange={passChange} name="cnewpassword" id="cnewpassword" minLength={5}  placeholder="Re-enter new Password"  autoComplete="off"/>
               </div>
             </div>
-            <button onClick={changedpass} className='btn w-100 mt-3'style={{backgroundColor:"#3f2b34d1",color:"white"}} >Confirm</button>
+            <button onClick={changedpass} className='btn w-100 mt-3'style={{backgroundColor:"#1A1C1E",color:"white"}} >Confirm</button>
               
       </section>
 

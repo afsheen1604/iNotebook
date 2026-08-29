@@ -11,8 +11,8 @@ const Noteitem = (props) => {
     return (
         <>
         <div className="col-md-3 mb-3">
-            <div class="card card-link card-link-rotate" style={{"backgroundColor": "#e3afbc"}}>
-                <div className="ribbon fs-5 px-3" style={{backgroundColor: "#9a1750", zIndex: "0"}}>{note.tag}</div>
+            <div class="card card-link card-link-rotate" style={{"backgroundColor": "#F3EEE3"}}>
+                <div className="ribbon fs-5 px-3" style={{backgroundColor: "#C49A45", zIndex: "0"}}>{note.tag}</div>
                 <div class="card-body">
                     <h3 class="card-title">
                         {note.title}
@@ -36,11 +36,11 @@ const Noteitem = (props) => {
                     </div>
                     <div class="card-meta d-flex justify-content-between">
                         <div >
-                            <i class="las la-trash mx-2 fs-2" style={{color: "#4d4d4f"}} onClick={()=>{deleteNoteItem(note);}}></i>
-                            <i class="las fs-2 mx-2 la-external-link-alt" style={{color: "#4d4d4f"}} onClick={()=>{shareNote(note);}}></i>
-                            <Link to={`/Viewnote/${note._id}`}><i className="las fs-2 la-eye mx-2" style={{color: "#4d4d4f"}}></i></Link>
+                            <i class="las la-trash mx-2 fs-2" style={{color: "#6B7280"}} onClick={()=>{deleteNoteItem(note);}}></i>
+                            <i class="las fs-2 mx-2 la-external-link-alt" style={{color: "#6B7280"}} onClick={()=>{shareNote(note);}}></i>
+                            <Link to={`/Viewnote/${note._id}`}><i className="las fs-2 la-eye mx-2" style={{color: "#6B7280"}}></i></Link>
                         </div>
-                        <span style={{fontSize: "0.95rem", color: "#4d4d4f"}}>{note.date}</span>
+                        <span style={{fontSize: "0.95rem", color: "#6B7280"}}>{note.date}</span>
                     </div>
                 </div>
             </div>

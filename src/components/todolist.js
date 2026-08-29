@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import noteContext from "../context/notes/noteContext";
 import { useNavigate } from "react-router-dom";
-import img from './timg3.jpg'
+
 
 const TodoList = (props) => {
     const context  = useContext(noteContext);
@@ -46,11 +46,11 @@ const TodoList = (props) => {
     }
 
     return (
-        <div className="p-4" style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+        <div className="p-4" style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
           
           <div className="card mb-3 m-auto"style={{width: "70%"}}>
             <div className="card-header row justify-content-between align-items-center">
-              <div className="col-12 mb-2 fs-2" style={{color:"#5a1734"}}><h1>Todo List</h1></div>
+              <div className="col-12 mb-2 fs-2" style={{color:"#1A1C1E"}}><h1>Todo List</h1></div>
               <div className="col-2"><p className="fs-3">{todoList.length} Tasks</p></div>
               <div className="col-5 task-filters">
                 <button className={`btn toggle-buttons ${listShow == "all" ? 'activetoggle': ''} `} id="all" onClick={toggleClick}>All</button>
@@ -62,10 +62,10 @@ const TodoList = (props) => {
               <div className="list-group list-group-flush list-group-hoverable">
                 {todoList.filter((item) => (listShow=='all' || item.status == listShow)).map((item) => {
                   return(
-                    <div className="list-group-item" key={item._id} style={{backgroundColor:(item.status === 'completed' ? '#27b62747' : '#9a17502e')}}>
+                    <div className="list-group-item" key={item._id} style={{backgroundColor:(item.status === 'completed' ? 'rgba(110,139,116,0.15)' : '#C49A452e')}}>
                       <div className="row align-items-center">
                         <div className="col-1">
-                          <input type="checkbox" className={`form-check-input ${item.status === 'completed' ? 'd-none' : ''}`} stylee={{backgroundColor:"#e3e2df"}} onChange={(e)=>{if(e.target.checked){handleEditItem(item._id, "completed", item.content);} else{
+                          <input type="checkbox" className={`form-check-input ${item.status === 'completed' ? 'd-none' : ''}`} stylee={{backgroundColor:"#F8F6F0"}} onChange={(e)=>{if(e.target.checked){handleEditItem(item._id, "completed", item.content);} else{
                             handleEditItem(item._id, "pending", item.content);
                           }}}/>
                         </div>
@@ -78,7 +78,7 @@ const TodoList = (props) => {
                           </div>
                         </div>
                         <div className="col-1 text-truncate" >
-                          <i className="las la-trash-alt mx-2 fs-2" style={{color: '#5a1734'}} onClick={()=>{deleteListItem(item._id); props.showAlert("Note Deleted Successfully", "success");}}></i>
+                          <i className="las la-trash-alt mx-2 fs-2" style={{color: '#1A1C1E'}} onClick={()=>{deleteListItem(item._id); props.showAlert("Note Deleted Successfully", "success");}}></i>
                         </div>
                       </div>
                     </div>);
@@ -88,13 +88,13 @@ const TodoList = (props) => {
 
             
             <div className="row align-items-end">
-             <div className="col-2"><button class="btn text-white" style={{backgroundColor:"#5a1734"}} onClick={suggestTasksFunc}>Suggest Tasks</button></div>
+             <div className="col-2"><button class="btn text-white" style={{backgroundColor:"#1A1C1E"}} onClick={suggestTasksFunc}>Suggest Tasks</button></div>
               
                 <div className="col-8">
                   <input type="text" value={listItem} onChange={onChange} className="form-control" />
                 </div>
                 <div className="col-2">
-                  <button className="btn btn-primary mt-2" style={{backgroundColor:"#5a1734"}}onClick={handleClick}> <i class="las la-plus-circle fs-1"></i> </button>
+                  <button className="btn btn-primary mt-2" style={{backgroundColor:"#1A1C1E"}}onClick={handleClick}> <i class="las la-plus-circle fs-1"></i> </button>
                 </div>
             </div>
          

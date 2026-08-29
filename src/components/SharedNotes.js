@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AddNote from "./addNote";
 import {DayPicker} from 'react-day-picker';
 
-import img from './timg3.jpg'
+
 import 'react-day-picker/dist/style.css'; // import the CSS file from the correct path
 
 const SharedNotes = (props) => {
@@ -27,7 +27,7 @@ const SharedNotes = (props) => {
   return (
     <>
 
-      <div className='p-4' style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+      <div className='p-4' style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
         <div className="row my-3">
           <h2>Shared Notes</h2>
           {sharedNotes.length === 0 && "No notes to display"}

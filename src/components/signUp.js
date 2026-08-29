@@ -162,14 +162,14 @@ const Signup = (props) => {
       else if(formStep===2){
         return (
           
-          <button  onClick={handleSubmition}   className="btn  w-100" style={{backgroundColor:"#3f2b34d1",color:"white"}}>Create new account</button>
+          <button  onClick={handleSubmition}   className="btn  w-100" style={{backgroundColor:"#1A1C1E",color:"white"}}>Create new account</button>
           
     
         )
       }
       else{
         return(
-          <button onClick={completeFormStep}  className="btn w-100 " style={{backgroundColor:"#3f2b34d1",color:"white"}}>Next</button>
+          <button onClick={completeFormStep}  className="btn w-100 " style={{backgroundColor:"#1A1C1E",color:"white"}}>Next</button>
  
         )
       }
@@ -177,7 +177,7 @@ const Signup = (props) => {
     
 
     return (
-        <div className="mainlogin m-0" style={{backgroundColor:"#5a1734"}}>
+        <div className="mainlogin m-0" style={{backgroundColor:"#1A1C1E"}}>
           <div className="login_content">
               <div className="login_img" style={{backgroundColor:"white"}}
               >
@@ -215,14 +215,14 @@ const Signup = (props) => {
               <div className="mb-3">
               <label htmlFor="otp" className='form-label'> Enter your OTP</label>
               <input type="text" name="otp" className="form-control"    onChange={(e) => setOtp(e.target.value)} placeholder='Enter your OTP'  />
-              <button className='btn w-100 mt-3'style={{backgroundColor:"#3f2b34d1",color:"white"}} onClick={verifyOtp}>Verify</button>
+              <button className='btn w-100 mt-3'style={{backgroundColor:"#1A1C1E",color:"white"}} onClick={verifyOtp}>Verify</button>
             </div>
             </div>
             
               )} 
               {send &&(
                 <div className="mt-3"> 
-              <button className='btn  w-100' style={{backgroundColor:"#3f2b34d1",color:"white"}} onClick={sendOtp} disabled={isLoading}>
+              <button className='btn  w-100' style={{backgroundColor:"#1A1C1E",color:"white"}} onClick={sendOtp} disabled={isLoading}>
                 {isLoading ?
                 <img src={spinner}></img>
                  : <span> Send OTP</span>}
@@ -231,7 +231,7 @@ const Signup = (props) => {
               </div>
               )}
              { nxt && (
-                <button onClick={completeFormStep} style={{backgroundColor:"#3f2b34d1",color:"white"}}  className="btn  w-100 mt-3">Next</button>
+                <button onClick={completeFormStep} style={{backgroundColor:"#1A1C1E",color:"white"}}  className="btn  w-100 mt-3">Next</button>
               )}
               
               </div> 
@@ -273,7 +273,7 @@ const Signup = (props) => {
             
        
         <div className="text-center text-muted mt-3">
-          Already have account? <Link to="/login" style={{color:"#5a1734"}}>Sign in</Link>
+          Already have account? <Link to="/login" style={{color:"#1A1C1E"}}>Sign in</Link>
         </div>
         {/* </form> */}
         </div>

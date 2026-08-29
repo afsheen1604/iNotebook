@@ -307,7 +307,7 @@ const NoteState = (props) => {
     setUser(json);
   };
 
-  const updateUser = async (name, mobile, password, hobbies, profileImage) => {
+  const updateUser = async (name, mobile, password, hobbies, profileImage, bio) => {
     // API Call
     const response = await fetch(`${host}/api/auth/updateUser`, {
       method: "POST",
@@ -315,7 +315,7 @@ const NoteState = (props) => {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
-      body: JSON.stringify({ name, mobile, password, hobbies, profileImage })
+      body: JSON.stringify({ name, mobile, password, hobbies, profileImage, bio })
     });
     const json = await response.json();
     //console.log(json)

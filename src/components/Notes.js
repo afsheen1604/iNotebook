@@ -6,7 +6,7 @@ import Noteitem from "./Noteitem";
 import { Link, useNavigate } from "react-router-dom";
 import AddNote from "./addNote";
 import {DayPicker} from 'react-day-picker';
-import img from './timg3.jpg'
+
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -170,24 +170,24 @@ const Notes = (props) => {
   }
 
   return (
-    <div className="p-4" style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+    <div className="p-4" style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
       <button
         data-bs-toggle="modal"
         data-bs-target="#AddNote"
         type="button"
         className="btn"
-        style={{backgroundColor: "#5a1734" ,color: "#fff",}}
+        style={{backgroundColor: "#1A1C1E" ,color: "#fff",}}
       >
         Add Note
       </button>
 
-      <Link className="btn mx-2" style={{color: "#3f2b34d1 !important"}} to="/notesbytags">Search By Tags</Link>
+      <Link className="btn mx-2" style={{color: "#1A1C1E !important"}} to="/notesbytags">Search By Tags</Link>
             
       <button
         ref={ref}
         type="button"
         className="btn d-none"
-        style={{color: "#3f2b34d1 !important"}}
+        style={{color: "#1A1C1E !important"}}
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
@@ -271,7 +271,7 @@ const Notes = (props) => {
                 
                 type="button"
                 className="btn"
-                style={{color: "#3f2b34d1 !important"}}
+                style={{color: "#1A1C1E !important"}}
               >
                 Update Note
               </button>
@@ -366,7 +366,7 @@ const Notes = (props) => {
         >
           <div class="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" style={{color:"#5a1734"}}>Add a Note</h5>
+              <h5 className="modal-title" style={{color:"#1A1C1E"}}>Add a Note</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div style={{maxHeight: '50px'}} className='w-auto ms-auto mt-2'>
@@ -402,7 +402,7 @@ const Notes = (props) => {
                     <div className="row">
                     {postImage.map((img, index) => (
                           <div className="col-3" key={index}>
-                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#5a1734"}} onClick={() => removeImage(index)}><i class="las la-backspace fs-2"></i></div>
+                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#1A1C1E"}} onClick={() => removeImage(index)}><i class="las la-backspace fs-2"></i></div>
                               <img src={img} alt="Stored Image" style={{ width: "150px" }} />
                           </div>
                       ))}
@@ -415,7 +415,7 @@ const Notes = (props) => {
               <button ref={refANC} className="btn btn-outline" data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn ms-auto text-white" disabled={note.title.length < 5 || note.description.length < 5} style={{backgroundColor: "#5a1734"}} onClick={handleClick}>
+              <button className="btn ms-auto text-white" disabled={note.title.length < 5 || note.description.length < 5} style={{backgroundColor: "#1A1C1E"}} onClick={handleClick}>
                 Add Note
               </button>
             </div>
@@ -432,7 +432,7 @@ const Notes = (props) => {
         <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Share Note &nbsp;&nbsp; <span style={{color: "#5a1734"}}>"{note.etitle}"</span> </h5>
+              <h5 className="modal-title">Share Note &nbsp;&nbsp; <span style={{color: "#1A1C1E"}}>"{note.etitle}"</span> </h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -450,7 +450,7 @@ const Notes = (props) => {
               <button ref={refSC} className="btn btn-outline" data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn ms-auto text-white" style={{backgroundColor: "#5a1734"}} onClick={shareToUsers}>
+              <button className="btn ms-auto text-white" style={{backgroundColor: "#1A1C1E"}} onClick={shareToUsers}>
                 share
               </button>
             </div>
@@ -460,7 +460,7 @@ const Notes = (props) => {
 
       {/* <div className='card'>
                 <div className='card-body'> */}
-      <div className="card my-3" style={{width: "fit-content", backgroundColor: "#e3e2df"}}>
+      <div className="card my-3" style={{width: "fit-content", backgroundColor: "#F8F6F0"}}>
         <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
         {/* {selectedDate && <p>Selected date: {selectedDate.toLocaleDateString('en-GB')}</p>} */}
       </div>

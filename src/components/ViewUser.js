@@ -11,7 +11,7 @@ import { PieChart, Pie, Tooltip, Sector, Cell, Label, BarChart,
   Legend } from "recharts";
 // import PieChart from './PieChart';
 
-import img from './timg3.jpg'
+
 function ViewUser( props ) {
   const context = useContext(noteContext);
   const params = useParams();
@@ -222,7 +222,7 @@ function ViewUser( props ) {
   }
 
   return (
-    <div div className="p-4" style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+    <div className="p-4" style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
       <a href="#" className="btn d-none" ref={refM} data-bs-toggle="modal" data-bs-target="#modal-report">
         Update Profile
       </a>
@@ -277,7 +277,7 @@ function ViewUser( props ) {
               <button ref={refMC} className="btn btn-outline" data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn ms-auto text-white" style={{backgroundColor: "#5a1734"}} onClick={updateProfile}>
+              <button className="btn ms-auto text-white" style={{backgroundColor: "#1A1C1E"}} onClick={updateProfile}>
                 Update
               </button>
             </div>
@@ -344,7 +344,7 @@ function ViewUser( props ) {
           <div className="container">
                 <div className="row align-items-center flex-row-reverse">
                     <div className="col-lg-6">
-                        <div className="about-text card go-to" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
+                        <div className="about-text card go-to" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
                           <div className="card-body">
                             <h3 className="dark-color mb-3 gap-4 d-flex align-items-center">{user.name}</h3>
                             <h6 className="theme-color lead">A Lead UX &amp; UI designer based in Canada</h6>
@@ -383,7 +383,7 @@ function ViewUser( props ) {
               </div>
       </section>
 
-      <div className="d-flex card mx-4 mb-4  flex-row align-items-center justify-content-between" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
+      <div className="d-flex card mx-4 mb-4  flex-row align-items-center justify-content-between" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
         <div className="">
           <Select
             options={months}
@@ -407,7 +407,7 @@ function ViewUser( props ) {
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
-            <Bar dataKey="Notes" barSize={20} fill="#5a1734" />
+            <Bar dataKey="Notes" barSize={20} fill="#1A1C1E" />
           </BarChart>
         </div>
         <div className="">
@@ -423,7 +423,7 @@ function ViewUser( props ) {
             >
               {/* Add colors to each segment of the pie */}
               {tagsData.map((tag, entry, index) => (
-                <Cell key={`cell-${index}`} fill={"#5a1734"} />
+                <Cell key={`cell-${index}`} fill={"#1A1C1E"} />
               ))}
 
               
@@ -438,30 +438,30 @@ function ViewUser( props ) {
         <div className="counter mt-5">
                     <div className="row justify-content-center">
                             <div className="col-6 col-lg-3">
-                                <div className="card" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
+                                <div className="card" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
                                   <div className="card-body">
                                     <div className="count-data text-center">
-                                        <h6 className="count h2" data-to="500" data-speed="500" style={{color: "#5a1734"}}>{stats.totalNotes}</h6>
+                                        <h6 className="count h2" data-to="500" data-speed="500" style={{color: "#1A1C1E"}}>{stats.totalNotes}</h6>
                                         <p className="mb-0 font-w-600">Notes Written</p>
                                     </div>
                                   </div>
                                 </div>
                             </div>
                             <div className="col-6 col-lg-3">
-                                <div className="card" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
+                                <div className="card" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
                                   <div className="card-body">
                                     <div className="count-data text-center">
-                                        <h6 className="count h2" data-to="150" data-speed="150" style={{color: "#5a1734"}}>{stats.totalImages}</h6>
+                                        <h6 className="count h2" data-to="150" data-speed="150" style={{color: "#1A1C1E"}}>{stats.totalImages}</h6>
                                         <p className="mb-0 font-w-600">Images Uploaded</p>
                                     </div>
                                   </div>
                                 </div>
                             </div>
                             <div className="col-6 col-lg-3">
-                                <div className="card" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
+                                <div className="card" style={{backgroundColor: "#FFFFFF", borderRadius: "10px"}}>
                                   <div className="card-body">
                                     <div className="count-data text-center">
-                                        <h6 className="count h2" data-to="850" data-speed="850" style={{color: "#5a1734"}}>{stats.totalUniqueDates}</h6>
+                                        <h6 className="count h2" data-to="850" data-speed="850" style={{color: "#1A1C1E"}}>{stats.totalUniqueDates}</h6>
                                         <p className="mb-0 font-w-600">Days Written</p>
                                     </div>
                                   </div>

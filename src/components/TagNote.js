@@ -5,7 +5,7 @@ import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import { useNavigate } from "react-router-dom";
 import AddNote from "./addNote";
-import img from './timg3.jpg'
+
 
 
 const TagNote = (props) => {
@@ -100,13 +100,13 @@ const TagNote = (props) => {
 
     
 
-    <div className="p-4" style={{backgroundImage: `url(${img})`, minHeight:"100vh"}}>
+    <div className="p-4" style={{backgroundColor: '#F8F6F0', minHeight:"100vh"}}>
       <div className="row mb-5">
         <div className="col-7">
           {/* <button
               type="button"
               className="btn text-white me-2"
-              style={{backgroundColor: "#5a1734"}}
+              style={{backgroundColor: "#1A1C1E"}}
               onClick={() => {
                 navigate("/addnote");
               }}
@@ -138,7 +138,7 @@ const TagNote = (props) => {
               <button
                 type="button"
                 className="btn text-white"
-                style={{backgroundColor: "#5a1734"}}
+                style={{backgroundColor: "#1A1C1E"}}
                 onClick={searchByTags}
               >
                 Search
@@ -236,7 +236,7 @@ const TagNote = (props) => {
         <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Share Note &nbsp;&nbsp; <span style={{color: "#5a1734"}}>"{note.etitle}"</span> </h5>
+              <h5 className="modal-title">Share Note &nbsp;&nbsp; <span style={{color: "#1A1C1E"}}>"{note.etitle}"</span> </h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -254,7 +254,7 @@ const TagNote = (props) => {
               <button ref={refSC} className="btn btn-outline" data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn text-white ms-auto" style={{backgroundColor: "#5a1734"}} onClick={shareToUsers}>
+              <button className="btn text-white ms-auto" style={{backgroundColor: "#1A1C1E"}} onClick={shareToUsers}>
                 share
               </button>
             </div>

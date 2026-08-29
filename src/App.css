@@ -53,13 +53,13 @@
 }
 
 .form-control:focus{
-  border-color: #5a1734;
+  border-color: #C49A45;
   box-shadow: none;
 }
 
 .activetoggle {
-  background: #3f2b34d1;
-  color: #ecf9f2;
+  background: #1A1C1E;
+  color: #FFFFFF;
   min-width: 60px;
   z-index: 1;
 }
@@ -83,9 +83,9 @@
 }
 
 .rdp-day_selected{
-  background-color: #5a1734;
+  background-color: #C49A45;
 }
 
 .rdp-day_selected:hover{
-  background-color: #7b415a;
+  background-color: #a8833a;
 }

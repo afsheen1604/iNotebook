@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Select from 'react-select';
 import noteContext from "../context/notes/noteContext"
-// import "./pro.css";
-import { Navigate } from "react-router-dom";
-import { PieChart, Pie, Tooltip, Sector, Cell, Label, BarChart,
+import { useNavigate } from "react-router-dom";
+import { PieChart, Pie, Tooltip, Cell, BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Legend } from "recharts";
-// import PieChart from './PieChart';
+  Legend,
+  ResponsiveContainer } from "recharts";
 
-import img from './timg3.jpg'
+
 function Profile( props ) {
   const context = useContext(noteContext);
+  const navigate = useNavigate();
   
   const { user, getUser, updateUser, getTagsData, tagsData, datesData, getDatesData, stats, getStats } = context;
   const [updatedUser, setUpdatedUser] = useState({
@@ -22,9 +22,9 @@ function Profile( props ) {
     hobbies: '',
     password: '',
     cnfPassword: '',
-    profileImage: ''
+    profileImage: '',
+    bio: ''
   });
-  const ref = useRef(null);
   const refM = useRef(null);
   const refMC = useRef(null);
 
@@ -52,91 +52,18 @@ function Profile( props ) {
     { value: '12', label: 'December' }
   ];
 
-  const getIntroOfPage = (label) => {
-    if (label === "Page A") {
-      return "Page A is about men's clothing";
-    }
-    if (label === "Page B") {
-      return "Page B is about women's dress";
-    }
-    if (label === "Page C") {
-      return "Page C is about women's bag";
-    }
-    if (label === "Page D") {
-      return "Page D is about household goods";
-    }
-    if (label === "Page E") {
-      return "Page E is about food";
-    }
-    if (label === "Page F") {
-      return "Page F is about baby food";
-    }
-    return "";
-  };
-  
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label}/06/2023 : ${payload[0].value}`}</p>
-          <p className="intro">{getIntroOfPage(label)}</p>
-          <p className="desc">Anything you want can be displayed here.</p>
+        <div style={{background: theme.card, padding: "8px 12px", border: `1px solid ${theme.border}`, borderRadius: "8px", boxShadow: theme.shadow}}>
+          <p style={{margin: 0, color: theme.text, fontSize: "12px", fontWeight: 500}}>{`${label} : ${payload[0].value} notes`}</p>
         </div>
       );
     }
-  
     return null;
   };
 
-
-  const renderActiveShape = (props) => {
-    const RADIAN = Math.PI / 180;
-    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
-    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    const ey = my;
-    const textAnchor = cos >= 0 ? 'start' : 'end';
-  
-    return (
-      <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-          {payload.name}
-        </text>
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-        />
-        <Sector
-          cx={cx}
-          cy={cy}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          innerRadius={outerRadius + 6}
-          outerRadius={outerRadius + 10}
-          fill={fill}
-        />
-        <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
-        </text>
-      </g>
-    );
-  };
-  
-
-  const COLORS = ["red", "blue", "green", "orange", "purple", "yellow"];
+  const COLORS = ["#C49A45", "#6E8B74", "#1A1C1E", "#E5E0D8", "#8B6914", "#4A6B50"];
 
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -153,8 +80,8 @@ function Profile( props ) {
 
   const handleMonthChange = (selected) => {
     setSelectedMonth(selected);
-    console.log(selected);
     getDatesData(selected.value, currentYear, "");
+    getTagsData(selected.value, currentYear, "");
   };
 
   const [alert, setAlert] = useState(null);
@@ -177,7 +104,7 @@ function Profile( props ) {
       console.log(user);
       getStats("");
     } else {
-      Navigate("/login");
+      navigate("/login");
     }
   }, []);
 
@@ -194,8 +121,13 @@ function Profile( props ) {
       hobbies: user.hobbies,
       password: "",
       cnfPassword: "",
-      profileImage: ""
+      profileImage: "",
+      bio: user.bio || ""
     })
+    if (user.hobbies) {
+      const hobbyValues = user.hobbies.split(', ').map(h => ({ value: h, label: h }));
+      setSelectedOptions(hobbyValues);
+    }
     refM.current.click();
   }
 
@@ -219,7 +151,7 @@ function Profile( props ) {
       
       const hobbies = selectedOptions.map((item) => item.value).join(', ');
       
-      updateUser(updatedUser.name, updatedUser.mobile, updatedUser.password, hobbies, updatedUser.profileImage);
+      updateUser(updatedUser.name, updatedUser.mobile, updatedUser.password, hobbies, updatedUser.profileImage, updatedUser.bio);
       refMC.current.click();
       props.showAlert("Profile Updated Successfully", "success");
 
@@ -230,260 +162,241 @@ function Profile( props ) {
     return lower.charAt(0).toUpperCase() + lower.slice(1);
   }
 
+  const theme = {
+    bg: "#F8F6F0",
+    card: "#FFFFFF",
+    cardAlt: "#F3EEE3",
+    accent: "#C49A45",
+    sidebar: "#1A1C1E",
+    sage: "#6E8B74",
+    text: "#1F2421",
+    textMuted: "#6B7280",
+    border: "#E5E0D8",
+    shadow: "0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)",
+  };
+
+  const fonts = {
+    heading: "'Playfair Display', serif",
+    body: "'Inter', sans-serif",
+  };
+
+  const initials = (user.name || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+  const defaultAvatar = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect fill="#C49A45" width="300" height="300"/><text fill="#fff" font-family="Arial" font-size="120" font-weight="600" x="50%" y="50%" dominant-baseline="central" text-anchor="middle">${initials}</text></svg>`)}`;
+
   return (
-    <div style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+    <div style={{backgroundColor: theme.bg, minHeight: "100vh", fontFamily: fonts.body}}>
       <a href="#" className="btn d-none" ref={refM} data-bs-toggle="modal" data-bs-target="#modal-report">
         Update Profile
       </a>
-      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-        <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" style={{color:"#5a1734"}}>Update Profile</h5>
+
+      {/* Update Profile Modal */}
+      <div className="modal modal-blur fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal-report" tabIndex="-1" role="dialog" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered" role="document" style={{maxWidth: "440px"}}>
+          <div className="modal-content" style={{borderRadius: "16px", border: "none", boxShadow: theme.shadow, padding: "24px"}}>
+            <div className="modal-header border-0 p-0 mb-2">
+              <h5 className="modal-title" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "20px", fontWeight: 600}}>Update Profile</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div style={{maxHeight: '50px'}} className='w-auto ms-auto mt-2'>
+            <div style={{maxHeight: '50px'}} className='w-auto ms-auto'>
               {alert && <div className={`alert alert-${alert.type} alert-dismissible fade show`} role="alert">
                 <strong>{capitalize(alert.type)}</strong>: {alert.msg} 
               </div>}
             </div>
-            <div className="modal-body">
+            <div className="modal-body p-0">
               <div className="mb-3">
-                <label className="form-label">Name</label>
-                <input type="text" className="form-control" name="name" value={updatedUser.name} onChange={handleProfileChange} />  
-              </div>
-              <div className="mb-3 row">
-                <div className="col-6">
-                  <label className="form-label">Upload Profile Picture <span><svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-file-upload" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M12 11v6"></path><path d="M9.5 13.5l2.5 -2.5l2.5 2.5"></path></svg></span></label>
-                  <input type="file" label="Image" name="profileImage" accept=".jpeg, .png, .jpg" className="form-control" onChange={(e) => handleImageUpload(e)} />
-                </div>
-                <div className="col-6">
-                  <label className="form-label">Mobile</label>
-                  <input type="text" className="form-control" name="mobile" value={updatedUser.mobile} onChange={handleProfileChange} />
-                </div>
+                <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Name</label>
+                <input type="text" className="form-control" style={{borderColor: theme.border, borderRadius: "8px", fontSize: "14px", lineHeight: "20px", backgroundColor: theme.cardAlt}} name="name" value={updatedUser.name} onChange={handleProfileChange} />  
               </div>
               <div className="mb-3">
-                <label className="form-label">Hobbies</label>
-                <Select
-                  options={options}
-                  isMulti
-                  value={selectedOptions}
-                  onChange={handleSelectChange}
-                />
+                <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Bio</label>
+                <textarea className="form-control" style={{borderColor: theme.border, borderRadius: "8px", fontSize: "14px", backgroundColor: theme.cardAlt}} name="bio" rows={3} maxLength={250} value={updatedUser.bio} onChange={handleProfileChange} placeholder="Tell us about yourself..." />
+                <small style={{color: theme.textMuted, fontSize: "11px"}}>{(updatedUser.bio || "").length}/250</small>
               </div>
-              <div className="mb-3 row">
-                <div className="col-6">
-                  <label className="form-label">Update Password</label>
-                  <input type="text" className="form-control" name="password" value={updatedUser.password} onChange={handleProfileChange} />
+              <div className="mb-3">
+                  <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Profile Picture</label>
+                  <div className="d-flex align-items-center gap-2">
+                    <input type="file" name="profileImage" accept=".jpeg, .png, .jpg" className="form-control" style={{borderColor: theme.border, borderRadius: "8px", fontSize: "14px", backgroundColor: theme.cardAlt}} onChange={(e) => handleImageUpload(e)} />
+                    {(user.profileImage || updatedUser.profileImage) && <button type="button" className="btn" style={{color: "#dc3545", border: `1px solid ${theme.border}`, borderRadius: "8px", fontSize: "13px", whiteSpace: "nowrap", height: "38px", display: "flex", alignItems: "center"}} onClick={() => setUpdatedUser({...updatedUser, profileImage: "remove"})}>
+                      <i className="las la-trash-alt me-1"></i> Remove
+                    </button>}
+                  </div>
+              </div>
+              <div className="mb-3">
+                  <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Mobile</label>
+                  <input type="text" className="form-control" style={{borderColor: theme.border, borderRadius: "8px", fontSize: "14px", backgroundColor: theme.cardAlt}} name="mobile" value={updatedUser.mobile} onChange={handleProfileChange} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Hobbies</label>
+                <Select options={options} isMulti value={selectedOptions} onChange={handleSelectChange} />
+              </div>
+              <div className="mb-3 row g-2">
+                <div className="col-12 col-sm-6">
+                  <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Password</label>
+                  <input type="password" className="form-control" style={{borderColor: theme.border, borderRadius: "8px", fontSize: "14px", backgroundColor: theme.cardAlt}} name="password" value={updatedUser.password} onChange={handleProfileChange} />
                 </div>
-                <div className="col-6">
-                  <label className="form-label">Re-Enter Password</label>
-                  <input type="text" className="form-control" name="cnfPassword" value={updatedUser.cnfPassword} onChange={handleProfileChange} />
+                <div className="col-12 col-sm-6">
+                  <label className="form-label" style={{fontSize: "13px", lineHeight: "18px", fontWeight: 500, color: theme.textMuted}}>Re-Enter Password</label>
+                  <input type="password" className="form-control" style={{borderColor: theme.border, borderRadius: "8px", fontSize: "14px", backgroundColor: theme.cardAlt}} name="cnfPassword" value={updatedUser.cnfPassword} onChange={handleProfileChange} />
                 </div>
               </div>
             </div>
-            <div className="modal-footer">
-              <button ref={refMC} className="btn btn-outline" data-bs-dismiss="modal">
+            <div className="modal-footer border-0 p-0 mt-2">
+              <button ref={refMC} className="btn px-4 py-2" style={{borderRadius: "8px", border: `1px solid ${theme.border}`, fontSize: "14px"}} data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn ms-auto text-white" style={{backgroundColor: "#5a1734"}} onClick={updateProfile}>
-                Update
+              <button className="btn ms-auto text-white px-4 py-2" style={{backgroundColor: theme.sidebar, borderRadius: "8px", fontSize: "14px"}} onClick={updateProfile}>
+                Save Changes
               </button>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Page Header */}
+      <div className="px-3 px-md-4 pt-3 pb-1">
+        <h4 className="mb-0" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "28px", fontWeight: 600, lineHeight: "36px"}}>iNotebook Profile</h4>
+      </div>
 
-      {/* <div className="content">
-        <div className="row">
-          <div className="col-md-6 mb-6">
-            <div className="pro">
-              <div className="firstinfo">
-                <img src={user.profileImage} alt="none"/>
-                <div className="profileinfo">
-                  <h1>{user.name}</h1>
-                  <h3>{user.email}</h3>
-                  <p className="bio">
-                    Intrested in Movies like Sci-Fi, and also a sports person.
-                  </p>
+      {/* User Info Section */}
+      <section className="px-3 px-md-4 pb-2 pt-2">
+        <p className="mb-2" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "20px", fontWeight: 600, lineHeight: "28px"}}>User info</p>
+        <div className="card border-0" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, padding: "20px"}}>
+            <div className="d-flex">
+              <img src={user.profileImage || defaultAvatar} alt="" onError={(e) => {e.target.src = defaultAvatar}} style={{width: "150px", height: "150px", borderRadius: "9999px", objectFit: "cover", border: `3px solid ${theme.accent}`, flexShrink: 0, backgroundColor: theme.accent}} />
+              <div className="ms-4 flex-grow-1">
+                <div className="d-flex align-items-center justify-content-between mb-1">
+                  <h4 className="mb-0" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "24px", fontWeight: 600, lineHeight: "32px"}}>{user.name}</h4>
+                  <button className="btn text-white px-3" style={{backgroundColor: theme.sidebar, borderRadius: "8px", fontSize: "12px", fontWeight: 500, padding: "8px 16px"}} onClick={showProfileModal}>
+                    <i className="las la-pen me-1"></i> Update Profile
+                  </button>
+                </div>
+                <p className="mb-2" style={{color: theme.textMuted, fontSize: "14px", lineHeight: "20px", fontWeight: 400}}>{user.bio || "Update your profile to add a bio"}</p>
+                <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
+                  <span style={{color: theme.text, fontSize: "14px", lineHeight: "20px", fontWeight: 600}}>Hobbies :</span>
+                  {user.hobbies ? user.hobbies.split(', ').map((hobby, i) => (
+                    <span key={i} style={{backgroundColor: theme.cardAlt, color: theme.text, border: `1px solid ${theme.border}`, borderRadius: "8px", padding: "6px 12px", fontSize: "13px", fontWeight: 500, lineHeight: "18px", height: "32px", display: "inline-flex", alignItems: "center"}}>{hobby}</span>
+                  )) : <span style={{color: theme.textMuted, fontSize: "13px"}}>No hobbies added</span>}
+                </div>
+                <div className="row">
+                  <div className="col-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="las la-phone" style={{color: theme.accent, fontSize: "1.1rem"}}></i>
+                      <span style={{color: theme.text, fontSize: "14px", lineHeight: "20px", fontWeight: 400}}>{user.mobile || "—"}</span>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="las la-envelope" style={{color: theme.accent, fontSize: "1.1rem"}}></i>
+                      <span style={{color: theme.text, fontSize: "14px", lineHeight: "20px", fontWeight: 400}}>{user.email || "—"}</span>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="las la-calendar" style={{color: theme.accent, fontSize: "1.1rem"}}></i>
+                      <span style={{color: theme.text, fontSize: "12px", lineHeight: "16px", fontWeight: 400}}>Joined: {user.date ? new Date(user.date).toLocaleDateString() : "—"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <br></br>
-            <br></br>
-          <a href="/">
-              <button className="bn632-hover bn26">IMAGES</button>
-            </a>
-            <button href="#" className="btn" onClick={showProfileModal}>
-              Update Profile
-            </button>
-          </div>
-
-          <div className="col-md-6 mb-6">
-            <div className="card-pro">
-              <div className="card1">
-                <p>
-                  <strong>Name:</strong> {user.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {user.email}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {user.mobile}
-                </p>
-                <p>
-                  <strong>Hobbies:</strong>{user.hobbies}
-                </p>
-                <p>
-                  <strong>Date Joined:</strong> {new Date(user.date).toLocaleDateString()}
-                </p>
-
-                <div className="go-corner" href="#">
-                  <div className="go-arrow"></div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div> */}
-
-
-      <section className="p-5 section about-section gray-bg" id="about">
-          <div className="container">
-                <div className="row align-items-center flex-row-reverse">
-                    <div className="col-lg-6">
-                        <div className="about-text card go-to" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
-                            <div className="card-body">
-                            <h2 className="dark-color mb-3 gap-4 d-flex align-items-center" style={{color: "#5a1734"}}>{user.name} <button className="btn text-white" style={{backgroundColor: "#5a1734"}} onClick={showProfileModal}>Update Profile</button></h2>
-                            <h6 className="theme-color lead">A Lead UX &amp; UI designer based in Canada</h6>
-                            <p>I <b>design and develop</b> services for customers of all sizes, specializing in creating stylish, modern websites, web services and online stores. My passion is to design digital user experiences through the bold interface and meaningful interactions.</p>
-                            <div className="row about-list">
-                                <div className="col-md-6">
-                                    <div className="media">
-                                        <label><b>Phone</b></label>
-                                        <p>{user.mobile}</p>
-                                    </div>
-                                    <div className="media">
-                                        <label><b>Hobbies</b></label>
-                                        <p>{user.hobbies}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="media">
-                                        <label><b>E-mail</b></label>
-                                        <p>{user.email}</p>
-                                    </div>
-                                    <div className="media">
-                                        <label><b>Date Joined</b></label>
-                                        <p>{new Date(user.date).toLocaleDateString()}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-6">
-                        <div className="about-avatar">
-                            <img className="m-auto" src={user.profileImage} title="" alt="" style={{width: "18rem", height: "18rem", borderRadius: "100%", objectFit: "cover"}} />
-                        </div>
-                    </div>
-                </div>
-                
-          </div>
       </section>
-      <div className="d-flex card mx-5 mb-4 flex-row align-items-center justify-content-between" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
-        
-        <div className="">
-          <Select
-            options={months}
-            value={selectedMonth}
-            onChange={handleMonthChange}
-            className="w-25 ms-5 mb-2"
-          />
-          <BarChart
-            width={750}
-            height={300}
-            data={datesData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend />
-            <Bar dataKey="Notes" barSize={20} fill="#5a1734" />
-          </BarChart>
-        </div>
-        <div className="">
-          <PieChart width={450} height={450}>
-            <Pie
-              data={tagsData}
-              dataKey="value"
-              cx={200}
-              cy={200}
-              outerRadius={120}
-              fill="black"
-              label
-            >
-              {/* Add colors to each segment of the pie */}
-              {tagsData.map((tag, entry, index) => (
-                <Cell key={`cell-${index}`} fill={"#5a1734"} />
-              ))}
 
-              
-
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </div>
-        </div>
-
-        <section className="p-4 pt-0 section about-section gray-bg" id="about">
-        <div className="counter mt-5">
-                    <div className="row justify-content-center">
-                            <div className="col-6 col-lg-3">
-                                <div className="card" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
-                                  <div className="card-body">
-                                    <div className="count-data text-center">
-                                        <h6 className="count h2" data-to="500" data-speed="500" style={{color: "#5a1734"}}>{stats.totalNotes}</h6>
-                                        <p className="mb-0 font-w-600">Notes Written</p>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                            <div className="col-6 col-lg-3">
-                                <div className="card" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
-                                  <div className="card-body">
-                                    <div className="count-data text-center">
-                                        <h6 className="count h2" data-to="150" data-speed="150" style={{color: "#5a1734"}}>{stats.totalImages}</h6>
-                                        <p className="mb-0 font-w-600">Images Uploaded</p>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                            <div className="col-6 col-lg-3">
-                                <div className="card" style={{backgroundColor: "#efdfdd", borderRadius: "10px"}}>
-                                  <div className="card-body">
-                                    <div className="count-data text-center">
-                                        <h6 className="count h2" data-to="850" data-speed="850" style={{color: "#5a1734"}}>{stats.totalUniqueDates}</h6>
-                                        <p className="mb-0 font-w-600">Days Written</p>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                            
-                        
-                    </div>
-
+      {/* Analytics Section */}
+      <section className="px-3 px-md-4 pb-3 pt-1">
+        <p className="mb-2" style={{color: theme.text, fontFamily: fonts.heading, fontSize: "20px", fontWeight: 600, lineHeight: "28px"}}>Analytics</p>
+        <div className="row g-3">
+          <div className="col-12 col-lg-4">
+            <div className="card border-0 h-100" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, overflow: "hidden"}}>
+              <div className="card-body" style={{overflow: "hidden"}}>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <h6 className="mb-0" style={{color: theme.text, fontSize: "14px", fontWeight: 600}}>Notes Frequency</h6>
+                  <Select
+                    options={months}
+                    value={selectedMonth}
+                    onChange={handleMonthChange}
+                    styles={{
+                      container: (base) => ({...base, width: '130px'}),
+                      control: (base) => ({...base, minHeight: '32px', fontSize: '12px', borderColor: theme.border, borderRadius: '8px'}),
+                    }}
+                  />
                 </div>
-        </section>
- 
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={datesData} margin={{top: 5, right: 10, left: -10, bottom: 5}}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={theme.border} />
+                    <XAxis dataKey="name" tick={{fontSize: 12, fill: theme.textMuted}} />
+                    <YAxis tick={{fontSize: 12, fill: theme.textMuted}} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend />
+                    <Bar dataKey="Notes" barSize={16} fill={theme.accent} radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-lg-4">
+            <div className="card border-0 h-100" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, overflow: "hidden"}}>
+              <div className="card-body" style={{overflow: "hidden"}}>
+                <h6 className="mb-3" style={{color: theme.text, fontSize: "14px", fontWeight: 600}}>Content Distribution</h6>
+                <ResponsiveContainer width="100%" height={270}>
+                  <PieChart>
+                    <Pie data={tagsData} dataKey="value" cx="50%" cy="50%" outerRadius={90} fill="black" label>
+                      {tagsData.map((tag, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-lg-4">
+            <div className="row g-3 h-100">
+              <div className="col-12">
+                <div className="card border-0" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, minHeight: "100px"}}>
+                  <div className="card-body d-flex align-items-center gap-3 p-3 px-4">
+                    <div className="d-flex align-items-center justify-content-center" style={{width: "48px", height: "48px", borderRadius: "12px", backgroundColor: theme.cardAlt}}>
+                      <i className="las la-pen-fancy fs-2" style={{color: theme.accent}}></i>
+                    </div>
+                    <div>
+                      <h3 className="mb-0" style={{color: theme.text, fontSize: "24px", fontWeight: 700}}>{stats.totalNotes || 0}</h3>
+                      <p className="mb-0" style={{color: theme.textMuted, fontSize: "14px", lineHeight: "20px", fontWeight: 600}}>Notes Written</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12">
+                <div className="card border-0" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, minHeight: "100px"}}>
+                  <div className="card-body d-flex align-items-center gap-3 p-3 px-4">
+                    <div className="d-flex align-items-center justify-content-center" style={{width: "48px", height: "48px", borderRadius: "12px", backgroundColor: theme.cardAlt}}>
+                      <i className="las la-images fs-2" style={{color: theme.sage}}></i>
+                    </div>
+                    <div>
+                      <h3 className="mb-0" style={{color: theme.text, fontSize: "24px", fontWeight: 700}}>{stats.totalImages || 0}</h3>
+                      <p className="mb-0" style={{color: theme.textMuted, fontSize: "14px", lineHeight: "20px", fontWeight: 600}}>Images Uploaded</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12">
+                <div className="card border-0" style={{backgroundColor: theme.card, borderRadius: "16px", boxShadow: theme.shadow, minHeight: "100px"}}>
+                  <div className="card-body d-flex align-items-center gap-3 p-3 px-4">
+                    <div className="d-flex align-items-center justify-content-center" style={{width: "48px", height: "48px", borderRadius: "12px", backgroundColor: theme.cardAlt}}>
+                      <i className="las la-calendar-check fs-2" style={{color: theme.sidebar}}></i>
+                    </div>
+                    <div>
+                      <h3 className="mb-0" style={{color: theme.text, fontSize: "24px", fontWeight: 700}}>{stats.totalUniqueDates || 0}</h3>
+                      <p className="mb-0" style={{color: theme.textMuted, fontSize: "14px", lineHeight: "20px", fontWeight: 600}}>Days Written</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

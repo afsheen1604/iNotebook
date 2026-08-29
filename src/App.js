@@ -45,12 +45,13 @@ function App() {
       <NoteState>
         <Router>
           <Navbar />
-          <div class="page-wrapper" style={{backgroundColor: '#e3e2df'}}>
+          <div className="page-wrapper" style={{backgroundColor: '#F8F6F0'}}>
             <div class="page-body m-0">
               <div class="container-xl p-0">
                 <Alert alert={alert}/>
                 <Routes>
-                  <Route exact path="/" element={<Home showAlert={showAlert} />} />
+                  <Route exact path="/" element={<Profile showAlert={showAlert} />} />
+                  <Route exact path="/notes" element={<Home showAlert={showAlert} />} />
                   <Route exact path="/ViewDiary" element={<ViewDiary showAlert={showAlert} />} />
                   <Route exact path="/sharedNotes" element={<SharedNotes showAlert={showAlert} />} />
                   <Route exact path="/login" element={<Login showAlert={showAlert} />} />

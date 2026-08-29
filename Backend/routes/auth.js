@@ -181,7 +181,7 @@ router.post('/getuser', fetchuser,  async (req, res) => {
 router.post('/updateUser', fetchuser,  async (req, res) => {
 
     try {
-        const { name, mobile, hobbies, profileImage, password } = req.body;
+        const { name, mobile, hobbies, profileImage, password, bio } = req.body;
 
         const updatedUser = {};
         if(name.length !=0){
@@ -195,11 +195,16 @@ router.post('/updateUser', fetchuser,  async (req, res) => {
         if(mobile.length !=0){
             updatedUser.mobile = mobile;
         }
-        if(profileImage.length !=0){
+        if(profileImage === "remove"){
+            updatedUser.profileImage = "";
+        } else if(profileImage.length !=0){
             updatedUser.profileImage = profileImage;
         }
         if(hobbies.length !=0){
             updatedUser.hobbies = hobbies;
+        }
+        if(bio !== undefined){
+            updatedUser.bio = bio;
         }
 
         let user = await User.findByIdAndUpdate(

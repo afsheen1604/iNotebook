@@ -8,7 +8,7 @@ import {
   faCircleXmark
 } from '@fortawesome/free-solid-svg-icons'
 import './ViewDiary.css'
-import img from './timg3.jpg'
+
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import noteContext from '../context/notes/noteContext'; 
 import {DayPicker} from 'react-day-picker';
@@ -121,11 +121,11 @@ const ViewDiary = (props) => {
   return (
     <>
     
-      <div className='p-4' style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+      <div className='p-4' style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
         <div className='d-flex justify-content-between align-items-center'>
-          <p style={{textAlign:"center",fontSize:"2.5rem",color:"#561734"}}>Diary</p> 
-          {(today == choosendate && state=="A")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#5a1734"}} onClick={()=>{setState("E"); setDescription((diary)?diary.description:null); setPostImage((diary)?diary.image:[])}}>Edit</button>}
-          {/* {(today===choosendate && state=="E")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#5a1734"}} onClick={saveDiary}>Save</button>} */}
+          <p style={{textAlign:"center",fontSize:"2.5rem",color:"#1A1C1E"}}>Diary</p> 
+          {(today == choosendate && state=="A")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#1A1C1E"}} onClick={()=>{setState("E"); setDescription((diary)?diary.description:null); setPostImage((diary)?diary.image:[])}}>Edit</button>}
+          {/* {(today===choosendate && state=="E")&&<button className='btn text-white' style={{height: "fit-content", backgroundColor: "#1A1C1E"}} onClick={saveDiary}>Save</button>} */}
         </div>
 
         <div className="textboxtitle" style={{position: "unset"}}>
@@ -171,14 +171,14 @@ const ViewDiary = (props) => {
                     <div className="row">
                     {postImage.map((img, index) => (
                           <div className="col-3" key={index}>
-                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#5a1734"}} onClick={() => removeImage(index)}><i class="las la-backspace fs-2"></i></div>
+                              <div className="btn text-white py-1 px-2" style={{backgroundColor: "#1A1C1E"}} onClick={() => removeImage(index)}><i class="las la-backspace fs-2"></i></div>
                               <img src={img} alt="Stored Image" style={{ width: "150px" }} />
                           </div>
                       ))}
                     </div></div>}
 
                   <div className='mb-3 text-end'>
-                    <button className='btn text-white' style={{backgroundColor: "#561734"}} onClick={saveDiary}>Save</button>
+                    <button className='btn text-white' style={{backgroundColor: "#1A1C1E"}} onClick={saveDiary}>Save</button>
                   </div>
 
                 </div>
@@ -188,7 +188,7 @@ const ViewDiary = (props) => {
           }
 
           <div className='col-4 ms-auto'>
-            <div className="card my-3 ms-auto" style={{width: "fit-content", backgroundColor: "#e3e2df"}}>
+            <div className="card my-3 ms-auto" style={{width: "fit-content", backgroundColor: "#F8F6F0"}}>
               <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
               {/* {selectedDate && <p>Selected date: {selectedDate.toLocaleDateString('en-GB')}</p>} */}
             </div>

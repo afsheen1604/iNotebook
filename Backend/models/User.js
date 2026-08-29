@@ -27,6 +27,11 @@ const UserSchema = new Schema({
         type: String,
         default: ""
     },
+    bio:{
+        type: String,
+        default: "",
+        maxlength: 250
+    },
     date:{
         type: Date,
         default: Date.now
@@ -34,5 +39,4 @@ const UserSchema = new Schema({
 });
 
 const User = mongoose.model('user', UserSchema);
-User.createIndexes();
 module.exports = User;

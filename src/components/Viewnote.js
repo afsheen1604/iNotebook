@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import './Viewnote.css'
 // import './Viewimage.css'
-import img from './timg3.jpg'
+
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import noteContext from '../context/notes/noteContext'; 
     
@@ -65,16 +65,16 @@ const Viewnote = () => {
 
   return (
     <>
-    <div className='p-4' style={{backgroundImage: `url(${img})`, minHeight: "100vh"}}>
+    <div className='p-4' style={{backgroundColor: '#F8F6F0', minHeight: "100vh"}}>
         <br />
     <div className='row'>
       <div className='col-6'>
       <div>
-          <p style={{textAlign:"left",fontSize:"2.5rem",color:"#561734"}}> {(noteItem===null)?'':noteItem.title}</p> 
+          <p style={{textAlign:"left",fontSize:"2.5rem",color:"#1A1C1E"}}> {(noteItem===null)?'':noteItem.title}</p> 
         </div>
       </div>
       <div className='col-6'>
-      <div className="" style={{textAlign:"right",fontSize:"1rem",color:"#561734"}}>
+      <div className="" style={{textAlign:"right",fontSize:"1rem",color:"#1A1C1E"}}>
           Date: <b>{(noteItem && noteItem.description) && noteItem.date}</b>
           <br></br>
           Tag: <b>{(noteItem===null)?'':noteItem.tag}</b>
@@ -86,10 +86,10 @@ const Viewnote = () => {
         <br /> */}
         
         {/* <div>
-          <p style={{textAlign:"left",fontSize:"2.5rem",color:"#561734"}}> {(noteItem===null)?'':noteItem.title}</p> 
+          <p style={{textAlign:"left",fontSize:"2.5rem",color:"#1A1C1E"}}> {(noteItem===null)?'':noteItem.title}</p> 
         </div> */}
       
-        {/* <div className="" style={{textAlign:"right",fontSize:"1.5rem",color:"#561734"}}>
+        {/* <div className="" style={{textAlign:"right",fontSize:"1.5rem",color:"#1A1C1E"}}>
           {(noteItem && noteItem.description) && noteItem.date}
           
         </div> */}
@@ -105,7 +105,7 @@ const Viewnote = () => {
        
       <div className='row'>
         <div className='col-7'>
-        <div class="card" style={{borderRadius:"10px", backgroundColor:"#efdfdd"} }>
+        <div class="card" style={{borderRadius:"10px", backgroundColor:"#FFFFFF"} }>
     <div class="card-body text-center">
       <p class="card-text">{(noteItem && noteItem.description) && <div  dangerouslySetInnerHTML={{ __html: noteItem.description }} />}</p>
     </div>
